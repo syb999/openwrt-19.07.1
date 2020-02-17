@@ -81,6 +81,8 @@ detect_mac80211() {
 		htmode=""
 		ht_capab=""
 
+		ssnm=_$(cat /sys/class/ieee80211/${dev}/macaddress | sed 's/.[0-9A-Fa-f]:.[0-9A-Fa-f]:.[0-9A-Fa-f]:\(.[0-9A-Fa-f]\):\(.[0-9A-Fa-f]\):\(.[0-9A-Fa-f]\)/\1\2\3/g' | tr :[a-z] :[A-Z])
+
 		iw phy "$dev" info | grep -q 'Capabilities:' && htmode=HT20
 
 		iw phy "$dev" info | grep -q '5180 MHz' && {
@@ -106,21 +108,32 @@ detect_mac80211() {
 			dev_id="set wireless.radio${devidx}.macaddr=$(cat /sys/class/ieee80211/${dev}/macaddress)"
 		fi
 
+		if [ x$mode_band == x"g" ]; then
+			ssid_wlan="_2.4G"
+		else
+			ssid_wlan="_5G"
+		fi
+
 		uci -q batch <<-EOF
 			set wireless.radio${devidx}=wifi-device
 			set wireless.radio${devidx}.type=mac80211
 			set wireless.radio${devidx}.channel=${channel}
 			set wireless.radio${devidx}.hwmode=11${mode_band}
+			set wireless.radio${devidx}.country=CN
+			set wireless.radio${devidx}.txpower=20
+			set wireless.radio${devidx}.legacy_rates=0
 			${dev_id}
 			${ht_capab}
-			set wireless.radio${devidx}.disabled=1
+			set wireless.radio${devidx}.disabled=0
 
 			set wireless.default_radio${devidx}=wifi-iface
 			set wireless.default_radio${devidx}.device=radio${devidx}
 			set wireless.default_radio${devidx}.network=lan
 			set wireless.default_radio${devidx}.mode=ap
-			set wireless.default_radio${devidx}.ssid=OpenWrt
+			set wireless.default_radio${devidx}.ssid=OpenWrt${ssid_wlan}${ssnm}
 			set wireless.default_radio${devidx}.encryption=none
+			set wireless.default_radio${devidx}.disassoc_low_ack=0
+			set wireless.default_radio${devidx}.isolate=0
 EOF
 		uci -q commit wireless
 
