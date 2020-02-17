@@ -674,3 +674,11 @@ define Device/zbt-wg3526-32M
 	kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic
 endef
 TARGET_DEVICES += zbt-wg3526-32M
+
+define Device/jdcloud-1
+  DTS := JDCloud-1
+  IMAGE_SIZE := $(ralink_default_fw_size_32M)
+  DEVICE_TITLE := JDCLOUD
+  DEVICE_PACKAGES := kmod-fs-ext4 kmod-mt7603 kmod-mt7615e kmod-sdhci-mt7620 kmod-usb3 wpad-basic
+endef
+TARGET_DEVICES += jdcloud-1

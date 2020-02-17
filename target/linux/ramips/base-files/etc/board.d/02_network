@@ -260,6 +260,7 @@ ramips_setup_interfaces()
 		ucidef_add_switch "switch0" \
 			"1:lan" "2:lan" "3:lan" "4:lan" "0:wan" "6@eth0"
 		;;
+	jdcloud-1|\
 	mikrotik,rbm33g)
 		ucidef_add_switch "switch0" \
 			"1:lan" "2:lan" "0:wan" "6@eth0"
@@ -631,6 +632,10 @@ ramips_setup_macs()
 	omega2p)
 		wan_mac=$(mtd_get_mac_binary factory 4)
 		lan_mac=$(mtd_get_mac_binary factory 46)
+		;;
+	jdcloud-1)
+		lan_mac=$(mtd_get_mac_binary factory 57344)
+		wan_mac=$(macaddr_add "$lan_mac" -1)
 		;;
 	oy-0001|\
 	phicomm,k2g)

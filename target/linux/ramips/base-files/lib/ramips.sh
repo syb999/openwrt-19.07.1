@@ -247,6 +247,9 @@ ramips_board_detect() {
 	*"IP2202")
 		name="ip2202"
 		;;
+	*"JDCloud-1")
+		name="jdcloud-1"
+		;;
 	*"JHR-N805R")
 		name="jhr-n805r"
 		;;
