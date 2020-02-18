@@ -125,7 +125,7 @@ define Package/openvpn-$(BUILD_VARIANT)/install
 		$(1)/usr/share/openvpn/openvpn.options
 
 	$(INSTALL_CONF) files/openvpn.config \
-		$(1)/etc/config/openvpn
+		$(1)/etc/config/openvpn.def
 
 	$(INSTALL_DATA) \
 		files/openvpn.upgrade \
