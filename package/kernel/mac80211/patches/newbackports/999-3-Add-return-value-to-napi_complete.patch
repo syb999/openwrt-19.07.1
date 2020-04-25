@@ -1,0 +1,39 @@
+mt76 checks the return value of napi_complete() now, add the same
+handling as already done for napi_complete_done().
+
+Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
+
+--- a/backport-include/linux/netdevice.h
++++ b/backport-include/linux/netdevice.h
+@@ -289,13 +289,27 @@
+ })
+ #endif /* netdev_alloc_pcpu_stats */
+ 
+-#if LINUX_VERSION_IS_LESS(3,19,0)
+-#define napi_complete_done LINUX_BACKPORT(napi_complete_done)
+-static inline void napi_complete_done(struct napi_struct *n, int work_done)
++#if LINUX_VERSION_IS_LESS(4,10,0)
++static inline bool backport_napi_complete_done(struct napi_struct *n, int work_done)
+ {
++	if (unlikely(test_bit(NAPI_STATE_NPSVC, &n->state)))
++		return false;
++
++#if LINUX_VERSION_IS_LESS(3,19,0)
+ 	napi_complete(n);
+-}
++#else
++	napi_complete_done(n, work_done);
+ #endif /* < 3.19 */
++	return true;
++}
++
++static inline bool backport_napi_complete(struct napi_struct *n)
++{
++	return backport_napi_complete_done(n, 0);
++}
++#define napi_complete_done LINUX_BACKPORT(napi_complete_done)
++#define napi_complete LINUX_BACKPORT(napi_complete)
++#endif /* < 4.10 */
+ 
+ #if LINUX_VERSION_IS_LESS(4,5,0)
+ #define netif_tx_napi_add LINUX_BACKPORT(netif_tx_napi_add)
