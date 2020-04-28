@@ -652,6 +652,9 @@ ramips_board_detect() {
 	*"X8")
 		name="x8"
 		;;
+	*"Xiaomi Redmi Router AC2100")
+		name="redmi-router-ac2100"
+		;;
 	*"Y1")
 		name="y1"
 		;;
