@@ -5,7 +5,7 @@
 	server string = |DESCRIPTION|
 	unix charset = |CHARSET|
 	workgroup = |WORKGROUP|
-	bind interfaces only = yes
+	bind interfaces only = no
 	deadtime = 30
 	enable core files = no
 	invalid users = root
