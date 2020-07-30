@@ -287,6 +287,9 @@ re350-v1)
 	ucidef_set_led_netdev "eth_act" "LAN act" "$boardname:green:eth_act" "eth0" "tx rx"
 	ucidef_set_led_switch "eth_link" "LAN link" "$boardname:green:eth_link" "switch0" "0x01"
 	;;
+mi-router-ac2100)
+	ucidef_set_led_netdev "wan" "wan" "$boardname:blue:wan" "eth0.2"
+	;;
 redmi-router-ac2100)
 	ucidef_set_led_netdev "wan" "wan" "$boardname:white:wan" "wan"
 	;;
