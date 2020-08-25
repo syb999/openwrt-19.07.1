@@ -9,9 +9,8 @@ diff -u mt76-2f1318a/dma.c mt76-87a6942/dma.c
  	netif_napi_del(&dev->tx_napi);
  	for (i = 0; i < ARRAY_SIZE(dev->q_tx); i++)
  		mt76_dma_tx_cleanup(dev, i, true);
-diff -u mt76-2f1318a/mac80211.c mt76-87a6942/mac80211.c
---- a/mac80211.c	2020-08-22 21:56:57.000000000 +0800
-+++ b/mac80211.c	2020-08-22 21:56:57.000000000 +0800
+--- a/mac80211.c
++++ b/mac80211.c
 @@ -2,7 +2,6 @@
  /*
   * Copyright (C) 2016 Felix Fietkau <nbd@nbd.name>
@@ -45,7 +44,7 @@ diff -u mt76-2f1318a/mac80211.c mt76-87a6942/mac80211.c
 -	if (ret)
 -		return ret;
 -
--	WARN_ON(mt76_worker_setup(hw, &dev->tx_worker, mt76_tx_worker, "tx"));
+-	WARN_ON(mt76_worker_setup(hw, &dev->tx_worker, NULL, "tx"));
 -	sched_setscheduler(dev->tx_worker.task, SCHED_FIFO, &sparam);
 -
 -	return 0;
