@@ -337,6 +337,44 @@ diff -u mt76-1/pci_init.c mt76-2/pci_init.c
  	mt76x02_mcu_cleanup(dev);
  }
  
+--- a/mt7915/dma.c
++++ b/mt7915/dma.c
+@@ -372,5 +372,6 @@
+ 		 MT_WFDMA0_RST_DMASHDL_ALL_RST |
+ 		 MT_WFDMA0_RST_LOGIC_RST);
+ 
++	tasklet_kill(&dev->mt76.tx_tasklet);
+ 	mt76_dma_cleanup(&dev->mt76);
+ }
+--- a/mt7915/mac.c
++++ b/mt7915/mac.c
+@@ -992,7 +992,7 @@
+ 	}
+ 
+ 	mt7915_mac_sta_poll(dev);
+-	mt76_worker_schedule(&dev->mt76.tx_worker);
++	tasklet_schedule(&dev->mt76.tx_tasklet);
+ 
+ 	napi_consume_skb(skb, 1);
+ 
+@@ -1272,7 +1272,7 @@
+ 	if (ext_phy)
+ 		mt76_txq_schedule_all(ext_phy);
+ 
+-	mt76_worker_disable(&dev->mt76.tx_worker);
++	tasklet_disable(&dev->mt76.tx_tasklet);
+ 	napi_disable(&dev->mt76.napi[0]);
+ 	napi_disable(&dev->mt76.napi[1]);
+ 	napi_disable(&dev->mt76.napi[2]);
+@@ -1292,7 +1292,7 @@
+ 	clear_bit(MT76_MCU_RESET, &dev->mphy.state);
+ 	clear_bit(MT76_RESET, &dev->mphy.state);
+ 
+-	mt76_worker_enable(&dev->mt76.tx_worker);
++	tasklet_enable(&dev->mt76.tx_tasklet);
+ 	napi_enable(&dev->mt76.tx_napi);
+ 	napi_schedule(&dev->mt76.tx_napi);
+ 
 diff -u mt76-2f1318a/testmode.c mt76-87a6942/testmode.c
 --- a/testmode.c	2020-08-22 21:56:57.000000000 +0800
 +++ b/testmode.c	2020-08-22 21:56:57.000000000 +0800
