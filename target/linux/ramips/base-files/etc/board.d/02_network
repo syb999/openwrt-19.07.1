@@ -237,6 +237,7 @@ ramips_setup_interfaces()
 	jhr-n926r|\
 	mikrotik,rb750gr3|\
 	mzk-wdpr|\
+	fwr200-v2|\
 	rt-n14u|\
 	skylab,skw92a|\
 	tplink,c20-v4|\
@@ -588,9 +589,12 @@ ramips_setup_macs()
 	whr-g300n)
 		wan_mac=$(mtd_get_mac_binary factory 4)
 		;;
+	hc5962)
+		lan_mac=$(mtd_get_mac_binary factory 57344)
+		wan_mac=$(macaddr_add "$lan_mac" -1)
+		;;
 	hc5*61|\
 	hc5661a|\
-	hc5962|\
 	hiwifi,hc5861b)
 		lan_mac=`mtd_get_mac_ascii bdinfo "Vfac_mac "`
 		[ -n "$lan_mac" ] || lan_mac=$(cat /sys/class/net/eth0/address)

@@ -302,6 +302,7 @@ rt-n12p)
 	ucidef_set_led_netdev "wan" "wan" "$boardname:green:wan" eth0.2
 	set_wifi_led "$boardname:green:air"
 	;;
+fwr200-v2|\
 rt-n14u)
 	ucidef_set_led_netdev "lan" "lan" "$boardname:blue:lan" eth0.1
 	ucidef_set_led_netdev "wan" "wan" "$boardname:blue:wan" eth0.2

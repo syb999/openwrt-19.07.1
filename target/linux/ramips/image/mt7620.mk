@@ -592,6 +592,12 @@ define Device/rt-n12p
 endef
 TARGET_DEVICES += rt-n12p
 
+define Device/fwr200-v2
+  DTS := FWR200_V2
+  DEVICE_TITLE := FAST FWR200-V2
+endef
+TARGET_DEVICES += fwr200-v2
+
 define Device/rt-n14u
   DTS := RT-N14U
   DEVICE_TITLE := Asus RT-N14u

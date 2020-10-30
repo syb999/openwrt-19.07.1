@@ -448,6 +448,9 @@ ramips_board_detect() {
 	*"RT-N13U")
 		name="rt-n13u"
 		;;
+	*"Fast FWR200 V2")
+		name="fwr200-v2"
+		;;
 	*"RT-N14U")
 		name="rt-n14u"
 		;;
