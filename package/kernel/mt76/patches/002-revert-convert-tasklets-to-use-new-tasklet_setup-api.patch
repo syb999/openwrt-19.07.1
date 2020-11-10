@@ -1,0 +1,111 @@
+--- a/mt7603/beacon.c
++++ b/mt7603/beacon.c
+@@ -64,9 +64,9 @@
+ 	data->count[mvif->idx]++;
+ }
+ 
+-void mt7603_pre_tbtt_tasklet(struct tasklet_struct *t)
++void mt7603_pre_tbtt_tasklet(unsigned long arg)
+ {
+-	struct mt7603_dev *dev = from_tasklet(dev, t, mt76.pre_tbtt_tasklet);
++	struct mt7603_dev *dev = (struct mt7603_dev *)arg;
+ 	struct mt76_queue *q;
+ 	struct beacon_bc_data data = {};
+ 	struct sk_buff *skb;
+--- a/mt7603/init.c
++++ b/mt7603/init.c
+@@ -533,7 +533,8 @@
+ 	spin_lock_init(&dev->ps_lock);
+ 
+ 	INIT_DELAYED_WORK(&dev->mt76.mac_work, mt7603_mac_work);
+-	tasklet_setup(&dev->mt76.pre_tbtt_tasklet, mt7603_pre_tbtt_tasklet);
++	tasklet_init(&dev->mt76.pre_tbtt_tasklet, mt7603_pre_tbtt_tasklet,
++		     (unsigned long)dev);
+ 
+ 	dev->slottime = 9;
+ 	dev->sensitivity_limit = 28;
+--- a/mt7603/mt7603.h
++++ b/mt7603/mt7603.h
+@@ -256,7 +256,7 @@
+ void mt7603_sta_remove(struct mt76_dev *mdev, struct ieee80211_vif *vif,
+ 		       struct ieee80211_sta *sta);
+ 
+-void mt7603_pre_tbtt_tasklet(struct tasklet_struct *t);
++void mt7603_pre_tbtt_tasklet(unsigned long arg);
+ 
+ void mt7603_update_channel(struct mt76_dev *mdev);
+ 
+--- a/mt7615/mmio.c
++++ b/mt7615/mmio.c
+@@ -98,9 +98,9 @@
+ 	return IRQ_HANDLED;
+ }
+ 
+-static void mt7615_irq_tasklet(struct tasklet_struct *t)
++static void mt7615_irq_tasklet(unsigned long data)
+ {
+-	struct mt7615_dev *dev = from_tasklet(dev, t, irq_tasklet);
++	struct mt7615_dev *dev = (struct mt7615_dev *)data;
+ 	u32 intr, mask = 0, tx_mcu_mask = mt7615_tx_mcu_int_mask(dev);
+ 
+ 	mt76_wr(dev, MT_INT_MASK_CSR, 0);
+@@ -203,7 +203,7 @@
+ 
+ 	dev = container_of(mdev, struct mt7615_dev, mt76);
+ 	mt76_mmio_init(&dev->mt76, mem_base);
+-	tasklet_setup(&dev->irq_tasklet, mt7615_irq_tasklet);
++	tasklet_init(&dev->irq_tasklet, mt7615_irq_tasklet, (unsigned long)dev);
+ 
+ 	dev->reg_map = map;
+ 	dev->ops = ops;
+--- a/mt76x02_dfs.c
++++ b/mt76x02_dfs.c
+@@ -609,11 +609,10 @@
+ 	}
+ }
+ 
+-static void mt76x02_dfs_tasklet(struct tasklet_struct *t)
++static void mt76x02_dfs_tasklet(unsigned long arg)
+ {
+-	struct mt76x02_dfs_pattern_detector *dfs_pd = from_tasklet(dfs_pd, t,
+-								   dfs_tasklet);
+-	struct mt76x02_dev *dev = container_of(dfs_pd, typeof(*dev), dfs_pd);
++	struct mt76x02_dev *dev = (struct mt76x02_dev *)arg;
++	struct mt76x02_dfs_pattern_detector *dfs_pd = &dev->dfs_pd;
+ 	u32 engine_mask;
+ 	int i;
+ 
+@@ -861,7 +860,8 @@
+ 	INIT_LIST_HEAD(&dfs_pd->seq_pool);
+ 	dev->mt76.region = NL80211_DFS_UNSET;
+ 	dfs_pd->last_sw_check = jiffies;
+-	tasklet_setup(&dfs_pd->dfs_tasklet, mt76x02_dfs_tasklet);
++	tasklet_init(&dfs_pd->dfs_tasklet, mt76x02_dfs_tasklet,
++		     (unsigned long)dev);
+ }
+ 
+ static void
+--- a/mt76x02_mmio.c
++++ b/mt76x02_mmio.c
+@@ -11,9 +11,9 @@
+ #include "mt76x02_mcu.h"
+ #include "trace.h"
+ 
+-static void mt76x02_pre_tbtt_tasklet(struct tasklet_struct *t)
++static void mt76x02_pre_tbtt_tasklet(unsigned long arg)
+ {
+-	struct mt76x02_dev *dev = from_tasklet(dev, t, mt76.pre_tbtt_tasklet);
++	struct mt76x02_dev *dev = (struct mt76x02_dev *)arg;
+ 	struct mt76_queue *q = dev->mt76.q_tx[MT_TXQ_PSD];
+ 	struct beacon_bc_data data = {};
+ 	struct sk_buff *skb;
+@@ -197,7 +197,8 @@
+ 		return -ENOMEM;
+ 
+ 	dev->mt76.tx_worker.fn = mt76x02_tx_worker;
+-	tasklet_setup(&dev->mt76.pre_tbtt_tasklet, mt76x02_pre_tbtt_tasklet);
++	tasklet_init(&dev->mt76.pre_tbtt_tasklet, mt76x02_pre_tbtt_tasklet,
++		     (unsigned long)dev);
+ 
+ 	spin_lock_init(&dev->txstatus_fifo_lock);
+ 	kfifo_init(&dev->txstatus_fifo, status_fifo, fifo_size);
