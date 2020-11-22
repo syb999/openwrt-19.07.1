@@ -564,7 +564,10 @@ ramips_setup_macs()
 	dch-m225)
 		lan_mac=$(mtd_get_mac_ascii factory lanmac)
 		;;
-	dir-867-a1|\
+	dir-867-a1)
+		lan_mac=$(cat /sys/class/net/eth0/address)
+		wan_mac=$(macaddr_add "$lan_mac" 3)
+		;;
 	dir-860l-b1)
 		lan_mac=$(mtd_get_mac_ascii factory lanmac)
 		wan_mac=$(mtd_get_mac_ascii factory wanmac)
