@@ -62,6 +62,11 @@ define Build/trx
 		-a 4 -f $(IMAGE_ROOTFS)
 endef
 
+define Build/uimage-padhdr
+	uimage_padhdr $(if $(1),-l $(1)) -i $@ -o $@.new
+	mv $@.new $@
+endef
+
 define Build/loader-common
 	rm -rf $@.src
 	$(MAKE) -C lzma-loader \

@@ -122,6 +122,21 @@ define Device/dir-860l-b1
 endef
 TARGET_DEVICES += dir-860l-b1
 
+define Device/dlink_dir-867-a1
+  DTS := DIR-867-A1
+  IMAGE_SIZE := $(ralink_default_fw_size_16M)
+  DEVICE_TITLE := D-Link DIR-867 A1
+  DEVICE_PACKAGES := kmod-mt7615e kmod-mt7615-firmware wpad-basic
+  KERNEL_INITRAMFS := $$(KERNEL) | uimage-padhdr 96
+  IMAGES += factory.bin
+  IMAGE/sysupgrade.bin := append-kernel | append-rootfs | uimage-padhdr 96 |\
+	pad-rootfs | append-metadata | check-size $$$$(IMAGE_SIZE)
+  IMAGE/factory.bin := append-kernel | append-rootfs | uimage-padhdr 96 |\
+	check-size $$$$(IMAGE_SIZE)
+endef
+TARGET_DEVICES += dlink_dir-867-a1
+
+
 define Device/mediatek_ap-mt7621a-v60
   DTS := AP-MT7621A-V60
   IMAGE_SIZE := $(ralink_default_fw_size_8M)
