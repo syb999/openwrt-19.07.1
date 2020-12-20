@@ -281,7 +281,7 @@ define Device/xiaomi_mir3p
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
   IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
   DEVICE_PACKAGES := \
-	kmod-mt7615e kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic \
+	kmod-mt7615e kmod-mt7615-firmware kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic \
 	uboot-envtools
 endef
 TARGET_DEVICES += xiaomi_mir3p
@@ -394,7 +394,7 @@ define Device/netgear_r6350
   IMAGE/rootfs.bin := append-ubi | check-size $$$$(IMAGE_SIZE)
   DEVICE_TITLE := Netgear R6350
   DEVICE_PACKAGES := \
-	kmod-mt7603 kmod-mt7615e kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic
+	kmod-mt7603 kmod-mt7615e kmod-mt7615-firmware kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic
 endef
 TARGET_DEVICES += netgear_r6350
 
@@ -477,7 +477,7 @@ define Device/mi-router-ac2100
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
   IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
   DEVICE_TITLE := Xiaomi Mi Router AC2100
-  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615e wpad-basic uboot-envtools
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615e kmod-mt7615-firmware wpad-basic uboot-envtools
 endef
 TARGET_DEVICES += mi-router-ac2100
 
@@ -494,7 +494,7 @@ define Device/redmi-router-ac2100
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
   IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
   DEVICE_TITLE := Xiaomi Redmi Router AC2100
-  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615e wpad-basic uboot-envtools
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615e kmod-mt7615-firmware wpad-basic uboot-envtools
 endef
 TARGET_DEVICES += redmi-router-ac2100
 
@@ -728,6 +728,6 @@ define Device/jdcloud-1
   DTS := JDCloud-1
   IMAGE_SIZE := $(ralink_default_fw_size_32M)
   DEVICE_TITLE := JDCLOUD
-  DEVICE_PACKAGES := kmod-fs-ext4 kmod-mt7603 kmod-mt7615e kmod-sdhci-mt7620 kmod-usb3 wpad-basic
+  DEVICE_PACKAGES := kmod-fs-ext4 kmod-mt7603 kmod-mt7615e kmod-mt7615-firmware kmod-sdhci-mt7620 kmod-usb3 wpad-basic
 endef
 TARGET_DEVICES += jdcloud-1
