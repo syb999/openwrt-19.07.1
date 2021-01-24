@@ -8,9 +8,9 @@ PKG_LICENSE_FILES:=
 
 PKG_SOURCE_URL:=https://github.com/openwrt/mt76
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_DATE:=2020-12-18
-PKG_SOURCE_VERSION:=4a90fdf6105e1517897aac1b451b73a54b3d9d0d
-PKG_MIRROR_HASH:=1ea778584d0fabbc75eb3b2f42aba0c0f2f5e6f0f5ae3084c17b9f02876ebdcc
+PKG_SOURCE_DATE:=2021-01-22
+PKG_SOURCE_VERSION:=8c796a33781c0efddec5e7e3488fe40484d32dc2
+PKG_MIRROR_HASH:=fd98e719ddae5af1470bae160925bb129361f8e552f25ca0432c03c66eaf618a
 
 PKG_MAINTAINER:=Felix Fietkau <nbd@nbd.name>
 PKG_BUILD_PARALLEL:=1
@@ -403,11 +403,11 @@ $(eval $(call KernelPackage,mt7603))
 $(eval $(call KernelPackage,mt7615-common))
 $(eval $(call KernelPackage,mt7615-firmware))
 $(eval $(call KernelPackage,mt7615e))
-$(eval $(call KernelPackage,mt7663-firmware-ap))
-$(eval $(call KernelPackage,mt7663-firmware-sta))
-$(eval $(call KernelPackage,mt7663-usb-sdio))
-$(eval $(call KernelPackage,mt7663u))
-$(eval $(call KernelPackage,mt7663s))
+#$(eval $(call KernelPackage,mt7663-firmware-ap))
+#$(eval $(call KernelPackage,mt7663-firmware-sta))
+#$(eval $(call KernelPackage,mt7663-usb-sdio))
+#$(eval $(call KernelPackage,mt7663u))
+#$(eval $(call KernelPackage,mt7663s))
 $(eval $(call KernelPackage,mt7915e))
 $(eval $(call KernelPackage,mt76))
 $(eval $(call BuildPackage,mt76-test))
