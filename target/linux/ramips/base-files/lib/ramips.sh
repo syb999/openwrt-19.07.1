@@ -250,6 +250,9 @@ ramips_board_detect() {
 	*"IP2202")
 		name="ip2202"
 		;;
+	*"JCG-Y2")
+		name="jcg-y2"
+		;;
 	*"JDCloud-1")
 		name="jdcloud-1"
 		;;

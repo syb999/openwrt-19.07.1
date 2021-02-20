@@ -266,6 +266,9 @@ define Device/k2p
   DTS := K2P
   IMAGE_SIZE := $(ralink_default_fw_size_16M)
   DEVICE_TITLE := Phicomm K2P
+  DEVICE_PACKAGES := \
+	kmod-mt7615e kmod-mt7615-firmware \
+	wpad-basic mt7615-dbdc-setup
 endef
 TARGET_DEVICES += k2p
 
@@ -314,6 +317,16 @@ define Device/mt7621
   DEVICE_TITLE := MediaTek MT7621 EVB
 endef
 TARGET_DEVICES += mt7621
+
+define Device/jcg-y2
+  DTS := JCG-Y2
+  IMAGE_SIZE := $(ralink_default_fw_size_16M)
+  DEVICE_TITLE := JCG Y2
+  DEVICE_PACKAGES := \
+	kmod-mt7615e kmod-mt7615-firmware kmod-usb3 \
+	kmod-usb-ledtrig-usbport wpad-basic mt7615-dbdc-setup
+endef
+TARGET_DEVICES += jcg-y2
 
 define Device/newifi-d1
   DTS := Newifi-D1
