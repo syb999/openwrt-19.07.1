@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mt7615-dbdc-setup
-PKG_VERSION:=0.1
+PKG_VERSION:=0.2
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -18,7 +18,7 @@ endef
 
 define Package/mt7615-dbdc-setup/install
 	$(INSTALL_DIR) $(1)/lib/wifi
-	$(INSTALL_BIN) ./files/wifi/wifi-init.sh $(1)/lib/wifi/wifi-init.sh
+	$(INSTALL_BIN) ./files/wifi/* $(1)/lib/wifi
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/init.d/wifi-init $(1)/etc/init.d/wifi-init
 	$(INSTALL_DIR) $(1)/etc/config
