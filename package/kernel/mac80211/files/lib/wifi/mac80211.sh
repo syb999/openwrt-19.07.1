@@ -131,7 +131,6 @@ detect_mac80211() {
 			set wireless.default_radio${devidx}.encryption=none
 			set wireless.default_radio${devidx}.disassoc_low_ack=0
 			set wireless.default_radio${devidx}.isolate=0
- EOF
 EOF
 		uci -q commit wireless
 
