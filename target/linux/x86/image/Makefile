@@ -263,6 +263,9 @@ ifneq ($(CONFIG_TARGET_IMAGES_GZIP),)
   define Image/Build/gzip/ext4
 	$(call Image/Build/gzip,ext4)
   endef
+  define Image/Build/gzip/squashfs
+	$(call Image/Build/gzip,squashfs)
+  endef
 endif
 
 define Image/BuildKernel
