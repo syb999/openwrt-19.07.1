@@ -60,7 +60,7 @@
  			  bool flush);
 --- a/tx.c
 +++ b/tx.c
-@@ -54,23 +54,11 @@
+@@ -54,27 +54,10 @@
  
  	spin_unlock_bh(&dev->status_list.lock);
  
@@ -74,19 +74,22 @@
 -		struct mt76_wcid *wcid;
 -
 -		wcid = rcu_dereference(dev->wcid[cb->wcid]);
--		if (wcid)
+-		if (wcid) {
 -			status.sta = wcid_to_sta(wcid);
+-
+-			if (status.sta)
+-				status.rate = &wcid->rate;
+-		}
 -
  		hw = mt76_tx_status_get_hw(dev, skb);
 -		ieee80211_tx_status_ext(hw, &status);
 +		ieee80211_tx_status(hw, skb);
  	}
 -	rcu_read_unlock();
-+
  }
  EXPORT_SYMBOL_GPL(mt76_tx_status_unlock);
  
-@@ -92,7 +80,7 @@
+@@ -92,7 +75,7 @@
  
  	/* Tx status can be unreliable. if it fails, mark the frame as ACKed */
  	if (flags & MT_TX_CB_TXS_FAILED) {
@@ -95,7 +98,7 @@
  		info->status.rates[0].idx = -1;
  		info->flags |= IEEE80211_TX_STAT_ACK;
  	}
-@@ -185,37 +173,36 @@
+@@ -185,37 +168,36 @@
  EXPORT_SYMBOL_GPL(mt76_tx_status_check);
  
  static void
@@ -152,7 +155,7 @@
  
  #ifdef CONFIG_NL80211_TESTMODE
  	if (mt76_is_testmode_skb(dev, skb, &hw)) {
-@@ -227,25 +214,21 @@
+@@ -227,25 +209,21 @@
  			wake_up(&dev->tx_wait);
  
  		dev_kfree_skb_any(skb);
@@ -182,3 +185,125 @@
  
  static int
  __mt76_tx_queue_skb(struct mt76_phy *phy, int qid, struct sk_buff *skb,
+--- a/mt7915/mac.c
++++ b/mt7915/mac.c
+@@ -1091,7 +1091,7 @@
+ 
+ static void
+ mt7915_txwi_free(struct mt7915_dev *dev, struct mt76_txwi_cache *t,
+-		 struct ieee80211_sta *sta, struct list_head *free_list)
++		 struct ieee80211_sta *sta)
+ {
+ 	struct mt76_dev *mdev = &dev->mt76;
+ 	struct mt76_wcid *wcid;
+@@ -1113,7 +1113,7 @@
+ 		wcid_idx = FIELD_GET(MT_TXD1_WLAN_IDX, le32_to_cpu(txwi[1]));
+ 	}
+ 
+-	__mt76_tx_complete_skb(mdev, wcid_idx, t->skb, free_list);
++	mt76_tx_complete_skb(mdev, wcid_idx, t->skb);
+ 
+ out:
+ 	t->skb = NULL;
+@@ -1128,8 +1128,6 @@
+ 	struct mt76_phy *mphy_ext = mdev->phy2;
+ 	struct mt76_txwi_cache *txwi;
+ 	struct ieee80211_sta *sta = NULL;
+-	LIST_HEAD(free_list);
+-	struct sk_buff *tmp;
+ 	u8 i, count;
+ 	bool wake = false;
+ 
+@@ -1186,7 +1184,7 @@
+ 		if (!txwi)
+ 			continue;
+ 
+-		mt7915_txwi_free(dev, txwi, sta, &free_list);
++		mt7915_txwi_free(dev, txwi, sta);
+ 	}
+ 
+ 	mt7915_mac_sta_poll(dev);
+@@ -1195,13 +1193,6 @@
+ 		mt76_set_tx_blocked(&dev->mt76, false);
+ 
+ 	mt76_worker_schedule(&dev->mt76.tx_worker);
+-
+-	napi_consume_skb(skb, 1);
+-
+-	list_for_each_entry_safe(skb, tmp, &free_list, list) {
+-		skb_list_del_init(skb);
+-		napi_consume_skb(skb, 1);
+-	}
+ }
+ 
+ static bool
+@@ -1604,7 +1595,7 @@
+ 
+ 	spin_lock_bh(&dev->mt76.token_lock);
+ 	idr_for_each_entry(&dev->mt76.token, txwi, id) {
+-		mt7915_txwi_free(dev, txwi, NULL, NULL);
++		mt7915_txwi_free(dev, txwi, NULL);
+ 		dev->mt76.token_count--;
+ 	}
+ 	spin_unlock_bh(&dev->mt76.token_lock);
+--- a/mt7921/mac.c
++++ b/mt7921/mac.c
+@@ -935,15 +935,13 @@
+ 
+ static void
+ mt7921_tx_complete_status(struct mt76_dev *mdev, struct sk_buff *skb,
+-			  struct ieee80211_sta *sta, u8 stat,
+-			  struct list_head *free_list)
++			  struct ieee80211_sta *sta, u8 stat)
+ {
+ 	struct ieee80211_tx_info *info = IEEE80211_SKB_CB(skb);
+ 	struct ieee80211_tx_status status = {
+ 		.sta = sta,
+ 		.info = info,
+ 		.skb = skb,
+-		.free_list = free_list,
+ 	};
+ 	struct ieee80211_hw *hw;
+ 
+@@ -1006,8 +1004,6 @@
+ 	struct mt76_dev *mdev = &dev->mt76;
+ 	struct mt76_txwi_cache *txwi;
+ 	struct ieee80211_sta *sta = NULL;
+-	LIST_HEAD(free_list);
+-	struct sk_buff *tmp;
+ 	bool wake = false;
+ 	u8 i, count;
+ 
+@@ -1075,7 +1071,7 @@
+ 					atomic_cmpxchg(&wcid->non_aql_packets, pending, 0);
+ 			}
+ 
+-			mt7921_tx_complete_status(mdev, txwi->skb, sta, stat, &free_list);
++			mt7921_tx_complete_status(mdev, txwi->skb, sta, stat);
+ 			txwi->skb = NULL;
+ 		}
+ 
+@@ -1085,13 +1081,6 @@
+ 	if (wake)
+ 		mt76_set_tx_blocked(&dev->mt76, false);
+ 
+-	napi_consume_skb(skb, 1);
+-
+-	list_for_each_entry_safe(skb, tmp, &free_list, list) {
+-		skb_list_del_init(skb);
+-		napi_consume_skb(skb, 1);
+-	}
+-
+ 	mt7921_mac_sta_poll(dev);
+ 	mt76_worker_schedule(&dev->mt76.tx_worker);
+ }
+@@ -1125,8 +1114,7 @@
+ 
+ 		wcid = rcu_dereference(dev->mt76.wcid[cb->wcid]);
+ 
+-		mt7921_tx_complete_status(mdev, e->skb, wcid_to_sta(wcid), 0,
+-					  NULL);
++		mt7921_tx_complete_status(mdev, e->skb, wcid_to_sta(wcid), 0);
+ 	}
+ }
+ 
