@@ -1,0 +1,225 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Assistant for automatic download m3u8 videos"
+msgstr "m3u8视频自动下载助手"
+
+msgid "Basic Setting for Video"
+msgstr "视频基本设置"
+
+msgid "Basic Setting for Audio"
+msgstr "音频基本设置"
+
+msgid "Basic Setting for docin"
+msgstr "docin.com基本设置"
+
+msgid "Basic Setting for book"
+msgstr "小说基本设置"
+
+msgid "Videos Download Page"
+msgstr "视频下载页面"
+
+msgid "Video URL"
+msgstr "视频 URL"
+
+msgid "URL for downloading videos"
+msgstr "下载视频的网页地址"
+
+msgid "Download directory"
+msgstr "下载目录"
+
+msgid "Please enter a valid directory"
+msgstr "请输入有效的目录"
+
+msgid "Sync download address (save & app after sync)"
+msgstr "同步下载地址(同步后先保存&应用)"
+
+msgid "One-click download"
+msgstr "一键下载"
+
+msgid "Download Videos directory"
+msgstr "视频下载目录"
+
+msgid "Videos Name"
+msgstr "视频名称"
+
+msgid "Videos from dy10000.com or xgys.net"
+msgstr "当前从dy10000.com和xgys.net下载的视频名称"
+
+msgid "Total number of video files"
+msgstr "该节目的总集数"
+
+msgid "Please enter a valid number"
+msgstr "请输入有效的集数"
+
+msgid "One-click ts to mp4"
+msgstr "一键转换成MP4"
+
+msgid "ffmpeg needs to be installed"
+msgstr "需要已安装好ffmpeg"
+
+msgid "Audios URL"
+msgstr "音频节目URL"
+
+msgid "URL for downloading https://www.ximalaya.com Audios"
+msgstr "喜马拉雅音频节目的URL页面地址"
+
+msgid "Audios URL multi pages"
+msgstr "启用下载音频节目URL多页功能"
+
+msgid "Need to download multiple pages of resources"
+msgstr "需要下载多页资源"
+
+msgid "Number of pages to download"
+msgstr "要下载的页数"
+
+msgid "Audios Name"
+msgstr "音频节目名"
+
+msgid "Audios from https://www.ximalaya.com"
+msgstr "喜马拉雅的音频节目"
+
+msgid "Wanna get VIP audios"
+msgstr "想要获取VIP音频"
+
+msgid "You must have VIP accout"
+msgstr "你必须有VIP账户"
+
+msgid "The value with Account Cookie name:1&_token"
+msgstr "帐户Cookie名称为1&_token的值"
+
+msgid "Using The Cookie of VIP account to get VIP audios"
+msgstr "使用VIP账号Cookie获取VIP音频"
+
+msgid "Set delay time"
+msgstr "设置下载的延迟时间(默认0秒)"
+
+msgid "Please enter a lastest number"
+msgstr "最新的节目集数"
+
+msgid "Usually one URL contains 30 new resources"
+msgstr "通常一个URL包含30个新的音频资源"
+
+msgid "Download Audios directory"
+msgstr "音频下载目录"
+
+msgid "Audios download"
+msgstr "音频下载"
+
+msgid "Get list"
+msgstr "获取节目表"
+
+msgid "Show current audio list"
+msgstr "开启当前节目列表"
+
+msgid "Select Audio number"
+msgstr "指定集数"
+
+msgid "Get list first"
+msgstr "需要先获取节目表"
+
+msgid "Select Audio"
+msgstr "选择音频"
+
+msgid "Wanna get www.ishuyin.com audios"
+msgstr "开启下载 www.ishuyin.com 音频功能"
+
+msgid "Download Audios numbers"
+msgstr "下载音频集数"
+
+msgid "Please enter the total number"
+msgstr "请输入该节目的总节目数"
+
+msgid "One-click download freeVIP"
+msgstr "一键下载新品限免节目或VIP节目"
+
+msgid "node needs to be installed"
+msgstr "需要已安装好node"
+
+msgid "One-click m4a to mp3"
+msgstr "一键m4a转mp3"
+
+msgid "One-click Play mp3"
+msgstr "一键播放mp3节目"
+
+msgid "One-click Play selected mp3"
+msgstr "一键播放被选择的mp3节目"
+
+msgid "One-click Play mp3(Positive)"
+msgstr "一键播放当前mp3节目(正序)"
+
+msgid "One-click Play mp3(Reverse)"
+msgstr "一键播放当前mp3节目(倒序)"
+
+msgid "USB sound card is needed and mpg123 package has been installed"
+msgstr "需要USB声卡，并已安装mpg123软件包"
+
+msgid "Play Next mp3"
+msgstr "播放下一首mp3"
+
+msgid "Stop play mp3"
+msgstr "停止播放mp3"
+
+msgid "Volume Up"
+msgstr "调高音量"
+
+msgid "Volume Down"
+msgstr "调低音量"
+
+msgid "www.ishuyin.com One-click download"
+msgstr "一键下载ishuyin.com"
+
+msgid "Audios download from https://www.ishuyin.com"
+msgstr "下载ishuyin.com音频"
+
+msgid "alsa-utils needs to be installed"
+msgstr "需要已安装好alsa-utils"
+
+msgid "One-click download documents"
+msgstr "一键下载文档(图片格式)"
+
+msgid "docin.com documents download"
+msgstr "豆丁网文档下载"
+
+msgid "docin.com doc URL"
+msgstr "豆丁网文档URL"
+
+msgid "Document total pages"
+msgstr "该文档总页数"
+
+msgid "Document Name"
+msgstr "文档名称"
+
+msgid "Download documents directory"
+msgstr "文档下载目录"
+
+msgid "Documents from https://docin.com"
+msgstr "获取自豆丁网的文档"
+
+msgid "URL for downloading https://docin.com documents"
+msgstr "豆丁网文档的URL页面地址"
+
+msgid "Book contents URL"
+msgstr "小说目录网址"
+
+msgid "Book URL"
+msgstr "小说URL"
+
+msgid "The title of a book"
+msgstr "书名"
+
+msgid "One-click download book"
+msgstr "一键下载小说"
+
+msgid "Download book directory"
+msgstr "小说下载目录"
+
+msgid "Books Download Page"
+msgstr "小说下载页面"
+
+msgid "Download a book from http://book.zongheng.com"
+msgstr "从纵横中文网下载小说"
+
+msgid "Download a book from https://www.biquge5200.cc"
+msgstr "从笔趣阁下载小说"
+
