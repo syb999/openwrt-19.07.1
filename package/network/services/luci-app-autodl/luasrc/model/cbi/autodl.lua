@@ -159,26 +159,6 @@ docinpath.default = "/mnt/sda3/docs"
 docinpath.rmempty = false
 docinpath.description = translate("Please enter a valid directory")
 
-s:tab("basic4", translate("Basic Setting for qingbiji"))
-
-qbjcookie=s:taboption("basic4", Value, "qbjcookie", translate("Get Cookie form URL:qingbiji.cn/myNote"))
-qbjcookie.datatype = "string"
-qbjcookie.default = ""
-qbjcookie.description = translate("Using the Cookie to get Your Notes from https://www.qingbiji.cn")
-
-qbjnum=s:taboption("basic4", Value, "qbjnum", translate("Number of Your Documents"))
-qbjnum.datatype = "string"
-qbjnum.placeholder = "1"
-qbjnum.default = "1"
-qbjnum.rmempty = false
-qbjnum.description = translate("Enter a positive integer")
-
-qbjpath=s:taboption("basic4", Value, "qbjpath", translate("Download documents directory"))
-qbjpath.datatype = "string"
-qbjpath.default = "/mnt/sda3/qbj"
-qbjpath.rmempty = false
-qbjpath.description = translate("Please enter a valid directory")
-
 s:tab("basic5", translate("Basic Setting for book"))
 
 bookurl=s:taboption("basic5", Value, "bookurl", translate("Book contents URL"))
@@ -387,29 +367,14 @@ au4 = s:taboption("autodldocin", Button, "_autodldocin", translate("One-click do
 au4.inputstyle = "apply"
 au4.description = translate("docin.com documents download")
 function au4.write(self, section)
-    luci.util.exec("uci get autodl.@autodl[0].docinurl > /tmp/autodldocin.url")
-    luci.util.exec("sleep 1")
-    luci.util.exec("uci get autodl.@autodl[0].docinpage > /tmp/autodldocin.page")
-    luci.util.exec("sleep 1")
-    luci.util.exec("uci get autodl.@autodl[0].docinname > /tmp/autodldocin.name")
-    luci.util.exec("sleep 1")
-    luci.util.exec("uci get autodl.@autodl[0].docinpath > /tmp/autodldocin.path")
-    luci.util.exec("sleep 1")
-    luci.util.exec("/usr/autodl/docin.sh &")
+    luci.util.exec("/usr/autodl/docin.sh >/dev/null 2>&1 &")
 end
 
-s:tab("autodlqbj", translate("Download from https://www.qingbiji.cn"))
-qbj1 = s:taboption("autodlqbj", Button, "_autodlqbj", translate("One-click download notes"))
-qbj1.inputstyle = "apply"
-qbj1.description = translate("download qingbiji.cn notes ")
-function qbj1.write(self, section)
-    luci.util.exec("uci get autodl.@autodl[0].qbjcookie > /tmp/autodlqbj.cookie")
-    luci.util.exec("sleep 1")
-    luci.util.exec("uci get autodl.@autodl[0].qbjnum > /tmp/autodlqbj.num")
-    luci.util.exec("sleep 1")
-    luci.util.exec("uci get autodl.@autodl[0].qbjpath > /tmp/autodlqbj.path")
-    luci.util.exec("sleep 1")
-    luci.util.exec("nohup /usr/autodl/autodlqbj.sh >/dev/null 2>&1 &")
+au4txt = s:taboption("autodldocin", Button, "_autodldocintxt", translate("One-click convert to TXT"))
+au4txt.inputstyle = "apply"
+au4txt.description = translate("docin.com documents convert to TXT(depends imagemagick & tesseract)")
+function au4txt.write(self, section)
+    luci.util.exec("/usr/autodl/docintotxt.sh >/dev/null 2>&1 &")
 end
 
 s:tab("autodlbook", translate("Books Download Page"))
