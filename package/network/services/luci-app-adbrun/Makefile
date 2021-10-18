@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 
 PKG_NAME:=luci-app-adbrun
-PKG_VERSION:=20211016
+PKG_VERSION:=20211018
 PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -21,6 +21,8 @@ define Package/luci-app-adbrun/description
 endef
 
 define Build/Prepare
+	$(foreach po,$(wildcard ${CURDIR}/luasrc/i18n/*.po), \
+		po2lmo $(po) $(PKG_BUILD_DIR)/$(patsubst %.po,%.lmo,$(notdir $(po)));)
 endef
 
 define Build/Compile

@@ -56,6 +56,9 @@ case $adbcommand in
 	;;
 	runjdlite) adbcd="shell am start -n com.jd.jdlite/.MainActivity"
 	;;
+	takephoto) adbcd="scripts"
+		adbsh="takephoto"
+	;;
 	pyxmlylite) adbcd="scripts"
 		adbsh="pyxmlylite"
 	;;
@@ -68,12 +71,19 @@ case $adbcommand in
 	autodiantao) adbcd="scripts"
 		adbsh="diantao"
 	;;
+	autojdlite) adbcd="scripts"
+		adbsh="jdlite"
+	;;
 	none) adbcd=""
 	;;
 esac
 
 if [ $adbcd == "scripts" ];then
-	if [ ${adbsh} ==  "pyxmlylite" ];then
+	if [ ${adbsh} ==  "takephoto" ];then
+		cp ${spath}${adbsh} /tmp/${sectionname}_sh
+		chmod +x /tmp/${sectionname}_sh
+		sh /tmp/${sectionname}_sh
+	elif [ ${adbsh} ==  "pyxmlylite" ];then
 		echo ximalayalite
 		if [ ${screensize} == "720x1280" ];then
 			cat ${spath}${adbsh} | sed -e "s/while\ True:/while\ True:\n\tsubprocess.call(r\'adb\ -s\ \$(uci\ get\ adbrun.\'+sectionname+\'.\'+currentclient+\'):5555\ shell\ screencap\ -p\ \/data\/local\/tmp\/sc\$(uci\ get\ adbrun.\'+sectionname+\'.\'+currentclient+\').jpg\',shell=True)\n\tsubprocess.call(r\'adb\ -s\ \$(uci\ get\ adbrun.\'+sectionname+\'.\'+currentclient+\'):5555\ pull\ \/data\/local\/tmp\/sc\$(uci\ get\ adbrun.\'+sectionname+\'.\'+currentclient+\').jpg\ \/tmp\/\ >\ \/dev\/null\ 2>\&1',shell=True)/;s/dosedxrangestart/10/;s/dosedxrangeend/710/;s/dosedxrangestep/5/;s/dosedyrangestart/330/;s/dosedyrangeend/680/;s/dosedtapax/555/;s/dosedtapay/335/;s/dosedtapbx/555/;s/dosedtapby/380/;" > /tmp/${sectionname}_py
@@ -146,6 +156,25 @@ if [ $adbcd == "scripts" ];then
 			sh /tmp/${sectionname}_sh
 		elif  [ ${screensize} == "1080x2280" ];then
 			cat ${spath}${adbsh} | sed 's/dosedxstart=/xstart=835/;s/dosedystart=/ystart=1050/;s/dosedbasex=/basex=910/;s/dosedbasey=/basey=1060/' > /tmp/${sectionname}_sh
+			chmod +x /tmp/${sectionname}_sh
+			sh /tmp/${sectionname}_sh
+		fi
+	elif  [ ${adbsh} == "jdlite" ];then
+		echo jdlite
+		if [ ${screensize} == "720x1280" ];then
+			cat ${spath}${adbsh} | sed 's/dosedxstart=/xstart=350/;s/dosedystart=/ystart=800/;s/dosedbasex=/basex=620/;s/dosedbasey=/basey=550/' > /tmp/${sectionname}_sh
+			chmod +x /tmp/${sectionname}_sh
+			sh /tmp/${sectionname}_sh
+		elif  [ ${screensize} == "1080x2244" ];then
+			cat ${spath}${adbsh} | sed 's/dosedxstart=/xstart=530/;s/dosedystart=/ystart=1560/;s/dosedbasex=/basex=950/;s/dosedbasey=/basey=835/' > /tmp/${sectionname}_sh
+			chmod +x /tmp/${sectionname}_sh
+			sh /tmp/${sectionname}_sh
+		elif  [ ${screensize} == "1080x1920" ];then
+			cat ${spath}${adbsh} | sed 's/dosedxstart=/xstart=530/;s/dosedystart=/ystart=1360/;s/dosedbasex=/basex=950/;s/dosedbasey=/basey=635/' > /tmp/${sectionname}_sh
+			chmod +x /tmp/${sectionname}_sh
+			sh /tmp/${sectionname}_sh
+		elif  [ ${screensize} == "1080x2280" ];then
+			cat ${spath}${adbsh} | sed 's/dosedxstart=/xstart=530/;s/dosedystart=/ystart=1560/;s/dosedbasex=/basex=950/;s/dosedbasey=/basey=835/' > /tmp/${sectionname}_sh
 			chmod +x /tmp/${sectionname}_sh
 			sh /tmp/${sectionname}_sh
 		fi
