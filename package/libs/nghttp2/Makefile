@@ -1,16 +1,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nghttp2
-PKG_VERSION:=1.39.2
+PKG_VERSION:=1.43.0
 PKG_RELEASE:=1
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-
 PKG_SOURCE_URL:=https://github.com/nghttp2/nghttp2/releases/download/v$(PKG_VERSION)
-PKG_HASH:=a2d216450abd2beaf4e200c168957968e89d602ca4119338b9d7ab059fd4ce8b
+PKG_HASH:=f7d54fa6f8aed29f695ca44612136fa2359013547394d5dffeffca9e01a26b0f
 
+PKG_MAINTAINER:=Hans Dedecker <dedeckeh@gmail.com>
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=COPYING
-CMAKE_INSTALL:=1
+
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
@@ -19,7 +21,6 @@ define Package/libnghttp2
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Library implementing the framing layer of HTTP/2
-  MAINTAINER:=Hans Dedecker <dedeckeh@gmail.com>
   ABI_VERSION:=14
 endef
 
@@ -31,11 +32,9 @@ CMAKE_OPTIONS += \
         -DENABLE_LIB_ONLY=ON
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/nghttp2
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/include/nghttp2/*.h $(1)/usr/include/nghttp2/
-	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/*.pc $(1)/usr/lib/pkgconfig/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnghttp2.so* $(1)/usr/lib/
+	$(call Build/InstallDev/cmake,$(1))
+	$(SED) 's,/usr/include,$$$${prefix}/include,g' $(1)/usr/lib/pkgconfig/libnghttp2.pc
+	$(SED) 's,/usr/lib,$$$${prefix}/lib,g' $(1)/usr/lib/pkgconfig/libnghttp2.pc
 endef
 
 define Package/libnghttp2/install
