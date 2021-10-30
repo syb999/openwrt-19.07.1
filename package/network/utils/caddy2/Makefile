@@ -37,7 +37,7 @@ define Package/$(PKG_NAME)
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Web Servers/Proxies
-  DEPENDS:=$(GO_ARCH_DEPENDS)
+  DEPENDS:=@broken $(GO_ARCH_DEPENDS)
 endef
 
 define Package/$(PKG_NAME)/description
