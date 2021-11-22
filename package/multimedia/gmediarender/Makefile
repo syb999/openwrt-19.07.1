@@ -27,7 +27,7 @@ define Package/gmediarender
   URL:=https://github.com/hzeller/gmrender-resurrect
   DEPENDS:= +gstreamer1 +glib2 +libupnp \
 	+gstreamer1-plugins-base +gst1-plugins-base \
-	+gstreamer1-utils +gst1-libav
+	+gst1-plugins-good +gstreamer1-utils +gst1-libav
 endef
 
 define Package/gmrender/description
