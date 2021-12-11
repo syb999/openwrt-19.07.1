@@ -103,7 +103,7 @@ config LIBCURL_TFTP
 
 config LIBCURL_NGHTTP2
 	bool "HTTP2 protocol"
-	default y
+	default n
 
 comment "Miscellaneous"
 
