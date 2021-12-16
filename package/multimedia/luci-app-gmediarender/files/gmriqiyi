@@ -3,8 +3,8 @@
 while true
 do
 	gmr_init
-	gmr_musicinit
+	gmr_iqiyiinit
 	gmr_dirinit
-	gmr_musicdownload
+	gmr_iqiyidownload
 	gmr_clear
 done
