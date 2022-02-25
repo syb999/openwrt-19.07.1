@@ -1,16 +1,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gmediarender
-PKG_VERSION:=2020-01-10
-PKG_RELEASE:=2
+PKG_VERSION:=0.0.9
+PKG_RELEASE:=1
 PKG_MAINTAINER:=h.zeller@acm.org
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/hzeller/gmrender-resurrect.git
-PKG_MIRROR_HASH:=b712da705226bef1c42f389700657b15643cad5868ec06f51d7eff0389e3aea0
-PKG_SOURCE_VERSION:=26d8f7edf5336bc30f7334c6ad459bf7f4f90ff2
+PKG_SOURCE_VERSION:=b2362c3b60991f0ed1e6493fce7de3ee2e74c8cb
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_HASH:=177a338bfc5c7e4692bb31e5635fe1ba4bd709f00459ef0f4f89bfce5f50442d
 
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=COPYING
@@ -27,30 +27,14 @@ define Package/gmediarender
   URL:=https://github.com/hzeller/gmrender-resurrect
   DEPENDS:= +gstreamer1 +glib2 +libupnp \
 	+gstreamer1-plugins-base +gst1-plugins-base \
-	+gst1-plugins-good +gstreamer1-utils +gst1-libav
+	+gstreamer1-utils +gst1-libav
 endef
 
 define Package/gmrender/description
 	Headless UPnP Renderer
 endef
 
-define Package/gmediarender/postinst
-#!/bin/sh
-if [ -z "$${IPKG_INSTROOT}" ]; then
-	echo "Enabling rc.d symlink for gmediarender"
-	/etc/init.d/gmediarender enable
-fi
-exit 0
-endef
-
-define Package/gmediarender/prerm
-#!/bin/sh
-if [ -z "$${IPKG_INSTROOT}" ]; then
-	echo "Removing rc.d symlink for gmediarender"
-	/etc/init.d/gmediarender disable
-fi
-exit 0
-endef
+TARGET_CFLAGS += -std=gnu99
 
 define Package/gmediarender/install
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -58,7 +42,7 @@ define Package/gmediarender/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/gmediarender.init $(1)/etc/init.d/gmediarender
 	$(INSTALL_DIR) $(1)/usr/share/gmediarender/
-	$(INSTALL_DATA) ./files/*.png $(1)/usr/share/gmediarender/
+	#$(INSTALL_DATA) ./files/*.png $(1)/usr/share/gmediarender/
 endef
 
 $(eval $(call BuildPackage,gmediarender))
