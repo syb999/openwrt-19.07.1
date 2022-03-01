@@ -301,6 +301,13 @@ function au3t.write(self, section)
     luci.util.exec("/usr/autodl/m4atomp3.sh >/dev/null 2>&1 &")
 end
 
+au3online = s:taboption("audioxmly", Button, "_au3online", translate("在线转码m4a to mp3"))
+au3online.inputstyle = "apply"
+au3online.description = translate("需要特定的解码服务器支持,本机需安装urlencode")
+function au3online.write(self, section)
+    luci.util.exec("/usr/autodl/xmlyonline.sh >/dev/null 2>&1 &")
+end
+
 au3isy = s:taboption("audioxmly", Button, "_audioisy", translate("www.ishuyin.com One-click download"))
 au3isy:depends("wanna_get_ishuyin_audios", "1")
 au3isy.inputstyle = "apply"
