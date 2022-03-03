@@ -1,0 +1,134 @@
+/dts-v1/;
+
+#include "mt7621.dtsi"
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+
+/ {
+	compatible = "nokia-a040wq", "mediatek,mt7621-soc";
+	model = "NOKIA-A040WQ";
+
+	aliases {
+		led-boot = &led_sys;
+		led-failsafe = &led_sys;
+		led-running = &led_sys;
+		led-upgrade = &led_sys;
+	};
+
+	chosen {
+		bootargs = "console=ttyS0,115200n8";
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		led_sys: sys {
+			label = "nokia-a040wq:blue:sys";
+			gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
+		};
+
+		wlan2g {
+			label = "nokia-a040wq:blue:wlan2g";
+			gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
+		};
+
+		wlan5g {
+			label = "nokia-a040wq:blue:wlan5g";
+			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+		};
+
+		usb {
+			label = "nokia-a040wq:blue:usb";
+			gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
+			trigger-sources = <&xhci_ehci_port1>, <&ehci_port2>;
+			linux,default-trigger = "usbport";
+		};
+	};
+
+	keys {
+		compatible = "gpio-keys";
+
+		reset {
+			label = "reset";
+			gpios = <&gpio0 15 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_RESTART>;
+		};
+
+		wps {
+			label = "wps";
+			gpios = <&gpio0 18 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_WPS_BUTTON>;
+		};
+	};
+};
+
+
+&nand {
+	status = "okay";
+
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		partition@0 {
+			label = "u-boot";
+			reg = <0x0 0x80000>;
+		};
+
+		partition@80000 {
+			label = "u-boot-env";
+			reg = <0x80000 0x40000>;
+		};
+
+
+		factory: partition@100000 {
+			label = "factory";
+			reg = <0x100000 0x40000>;
+			read-only;
+		};
+
+		partition@140000 {
+			label = "kernel";
+			reg = <0x140000 0x400000>;
+		};
+
+		partition@540000 {
+			label = "ubi";
+			reg = <0x540000 0x7580000>;
+		};
+	};
+};
+
+&pcie {
+	status = "okay";
+};
+
+&pcie0 {
+	wifi@0,0 {
+		compatible = "mediatek,mt76";
+		reg = <0x0000 0 0 0 0>;
+		mediatek,mtd-eeprom = <&factory 0x0>;
+
+		led {
+			led-sources = <3>;
+			led-active-low;
+		};
+	};
+};
+
+
+
+&ethernet {
+	mtd-mac-address = <&factory 0x4>;
+};
+
+&pinctrl {
+	state_default: pinctrl0 {
+		gpio {
+			ralink,group = "i2c", "jtag", "uart2", "uart3", "wdt";
+			ralink,function = "gpio";
+		};
+	};
+};

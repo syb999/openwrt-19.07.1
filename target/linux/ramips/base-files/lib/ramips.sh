@@ -376,6 +376,9 @@ ramips_board_detect() {
 	*"NixcoreX1 (16M)")
 		name="nixcore-x1-16M"
 		;;
+	*"NOKIA-A040WQ")
+		name="nokia-a040wq"
+		;;
 	*"NW718")
 		name="nw718"
 		;;

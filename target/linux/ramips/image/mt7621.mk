@@ -494,6 +494,22 @@ define Device/mi-router-ac2100
 endef
 TARGET_DEVICES += mi-router-ac2100
 
+define Device/nokia-a040wq
+  DTS := NOKIA-A040WQ
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  KERNEL_SIZE := 4096k
+  IMAGE_SIZE := 120320k
+  UBINIZE_OPTS := -E 5
+  IMAGES += factory.bin
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
+  DEVICE_TITLE := NOKIA-A040WQ
+  DEVICE_PACKAGES := kmod-mt7615e kmod-mt7615-firmware kmod-usb3 wpad-basic \
+	kmod-usb-ledtrig-usbport uboot-envtools mt7615-dbdc-setup
+endef
+TARGET_DEVICES += nokia-a040wq
+
 define Device/redmi-router-ac2100
   DTS := REDMI-ROUTER-AC2100
   BLOCKSIZE := 128k

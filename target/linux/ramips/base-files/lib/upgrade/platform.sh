@@ -58,6 +58,7 @@ platform_do_upgrade() {
 	hc5962|\
 	r6220|\
 	mi-router-ac2100|\
+	nokia-a040wq|\
 	redmi-router-ac2100|\
 	netgear,r6350|\
 	ubnt-erx|\
