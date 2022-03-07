@@ -73,11 +73,12 @@ function getxmlyaudios(){
 		echo ${xmlyfinddurationcode%,\"ep*} > /tmp/tmpXMVIP.xmlyduration2
 		xmlynewdurationcode=$(cat /tmp/tmpXMVIP.xmlyduration2)
 
-		curl -s http://192.168.7.7:7777/epcode/$xmlynewepcode > /tmp/tmpXMVIP.xmlyVIPCODE
+		onlineserver=$(uci get autodl.@autodl[0].onlineip)
+		curl -s $onlineserver/epcode/$xmlynewepcode > /tmp/tmpXMVIP.xmlyVIPCODE
 		sleep 1
-		curl -s http://192.168.7.7:7777/sdcode/$xmlynewseedcode
+		curl -s $onlineserver/sdcode/$xmlynewseedcode
 		sleep 1
-		curl -s http://192.168.7.7:7777/phcode/$xmlynewpathcode | sed 's/\\n\"$/\"/' | cut -d '"' -f 2 > /tmp/tmpXMVIP.xmlyVIPPATH
+		curl -s $onlineserver/phcode/$xmlynewpathcode | sed 's/\\n\"$/\"/' | cut -d '"' -f 2 > /tmp/tmpXMVIP.xmlyVIPPATH
 		sleep 1
 
 		cat /tmp/tmpXMVIP.xmlyVIPCODE | cut -d "'" -f 2 > /tmp/tmpXMVIP.xmlyVIPbuykey
