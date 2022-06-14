@@ -30,14 +30,15 @@ function adbxhotplug.write(self, section)
 end
 
 a:tab("diantaoinit_set", translate("diantao init setting"))
-diantaoskip = a:taboption("diantaoinit_set", Value, "diantaoskip", translate("diantao skip"))
+diantaoskip = a:taboption("diantaoinit_set", Value, "diantaoskip", translate("diantao skip step(default for 1080x1920)"))
 diantaoskip.datatype = "string"
-diantaoskip.default = "2"
+diantaoskip.default = "210"
 diantaoskip.rmempty = false
+
 
 diantaodayworklist = a:taboption("diantaoinit_set", Value, "diantaodayworklist", translate("diantao daytime worklist"))
 diantaodayworklist.datatype = "string"
-diantaodayworklist.default = "60秒2次 skip 3分钟1次 5分钟2次 5分钟3次 60秒1次"
+diantaodayworklist.default = "skip 60秒2次 skip 3分钟1次 5分钟2次 5分钟3次 60秒1次"
 diantaodayworklist.rmempty = false
 
 diantaonightworklist=a:taboption("diantaoinit_set", Value, "diantaonightworklist", translate("diantao night worklist"))
