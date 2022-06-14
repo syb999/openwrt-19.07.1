@@ -23,7 +23,7 @@ define Package/luci-app-autodl
 	SUBMENU:=3. Applications
 	TITLE:=LuCI Support for auto download video & audio
 	PKGARCH:=all
-	DEPENDS:=+curl +wget-ssl +urlencode \
+	DEPENDS:=+curl +wget +urlencode \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Online_Server:online_server
 endef
 
