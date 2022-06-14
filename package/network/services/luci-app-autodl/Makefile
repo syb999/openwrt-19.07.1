@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-autodl
-PKG_VERSION:=20220316
+PKG_VERSION:=20220526
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -12,7 +12,7 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_Online_Server
 	bool "Include Online Server"
 	default n
 	help
-	requires python3.6+ with pip(for fastapi and uvicorn),node,ffmpeg
+	requires python3.6+ with pip(for fastapi and uvicorn),node,ffmpeg,pillow,qrcode
 
 endmenu
 endef
@@ -23,7 +23,7 @@ define Package/luci-app-autodl
 	SUBMENU:=3. Applications
 	TITLE:=LuCI Support for auto download video & audio
 	PKGARCH:=all
-	DEPENDS:=+curl +wget +urlencode \
+	DEPENDS:=+curl +wget-ssl +urlencode \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Online_Server:online_server
 endef
 
