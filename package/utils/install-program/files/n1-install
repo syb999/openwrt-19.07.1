@@ -39,8 +39,8 @@ if [ $(blkid ${dev_emmc}p[1-3] | grep -E 'BOOT_EMMC|ROOT_EMMC|DATA' | wc -l) != 
     echo "create mbr and partition..."
     parted -s $dev_emmc mklabel msdos
     parted -s $dev_emmc mkpart primary fat32 700M 956M
-    parted -s $dev_emmc mkpart primary ext4 957M 2457M
-    parted -s $dev_emmc mkpart primary ext4 2458M 100%
+    parted -s $dev_emmc mkpart primary ext4 957M 1981M
+    parted -s $dev_emmc mkpart primary ext4 1982M 100%
 
     echo "restore u-boot..."
     dd if=u-boot.img of=$dev_emmc conv=fsync bs=1 count=442 2>/dev/null
