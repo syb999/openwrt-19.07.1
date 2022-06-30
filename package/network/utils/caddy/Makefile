@@ -18,7 +18,7 @@ define Package/$(PKG_NAME)
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Web Servers/Proxies
-  DEPENDS:=@(TARGET_sunxi_cortexa7||TARGET_brcm2708_bcm2710||TARGET_ar71xx||TARGET_ramips||TARGET_x86_64)
+  DEPENDS:=@(TARGET_sunxi_cortexa7||TARGET_brcm2708_bcm2710||TARGET_armvirt||TARGET_ar71xx||TARGET_ramips||TARGET_x86_64)
 endef
 
 define Package/$(PKG_NAME)/description
