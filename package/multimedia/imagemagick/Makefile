@@ -34,7 +34,7 @@ endef
 
 define Package/imagemagick
   $(call Package/imagemagick/Default)
-  DEPENDS:=+libltdl +libpthread +zlib +libfreetype +libpng +libjpeg +libtiff
+  DEPENDS:=+libltdl +libpthread +zlib +libfreetype +libpng +libjpeg-turbo +libtiff
 endef
 
 define Package/imagemagick/description
