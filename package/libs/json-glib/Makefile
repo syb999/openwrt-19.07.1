@@ -27,7 +27,7 @@ OPENWRT_VERBOSE:=c
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
-include ../../devel/meson/meson.mk
+include $(TOPDIR)/feeds/packages/devel/meson/meson.mk
 
 define Package/json-glib
   SECTION:=libs
