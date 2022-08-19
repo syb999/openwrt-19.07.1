@@ -6,7 +6,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=node8
+PKG_NAME:=node_8-14
 PKG_VERSION:=1
 PKG_RELEASE:=
 
@@ -15,7 +15,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/$(PKG_NAME)
   SECTION:=lang
   CATEGORY:=Languages
-  SUBMENU:=Node.js-v8
+  SUBMENU:=Node.js-v8_or_v14
   TITLE:=Node.js is a platform built on Chrome's JavaScript runtime
   URL:=https://nodejs.org/
   DEPENDS:=@(HAS_FPU||KERNEL_MIPS_FPU_EMULATOR)
@@ -34,6 +34,17 @@ ifeq ($(ARCH),mips)
 	node_ARCH:=ar71xx
 	PKG_HASH:=c3f121bad1943f36512e658851c88694b05808326ea8697473622bf95210deec
 endif
+
+ifeq ($(ARCH),aarch64)
+	node_ARCH:=aarch64
+	PKG_HASH:=724e62d7fd623ca8cc34b886c795e6108548983dbfda3970d40af2b3d1aa3262
+endif
+
+ifeq ($(ARCH),arm)
+	node_ARCH:=arm
+	PKG_HASH:=9a2881a929ca04a59abf425672dffdae867ad596edc830873a04a688d193431e
+endif
+
 
 PKG_SOURCE_URL:=https://raw.githubusercontent.com/syb999/1907-upx/master/node/$(node_ARCH)
 PKG_SOURCE:=node
