@@ -24,6 +24,16 @@ function get_apk(ip,port)
 	return "checking"
 end
 
+function get_screensize(ip,port)
+	local whsize = io.popen("adb -s " .. ip .. ":" .. port .." shell dumpsys display | grep real | head -n1 | awk -F 'real' '{print$2}' | cut -d ',' -f1 | sed 's/ //g' 2>/dev/null")
+	if whsize then
+		local screensize = whsize:read("*l")
+		whsize:close()
+		return screensize
+	end
+	return "checking"
+end
+
 function get_pid(ip)
 	local pid = luci.sys.exec("busybox ps | grep ADBRUN$(uci show adbrun | grep " ..ip .. " | cut -d '.' -f 2) | grep -v grep | head -n 1 | awk '{print $1}' 2>/dev/null")
 	return pid
@@ -65,8 +75,8 @@ function xact_status()
 			local ln = adblist:read("*l")
 			if not ln then
 				break
-			elseif ln:match("(%S-):(%d+).-") then
-				deviceid, port = ln:match("(%S-):(%d+).-")
+			elseif ln:match("(%S-):(%d+).device") then
+				deviceid, port = ln:match("(%S-):(%d+).device")
 				if num and deviceid and port then
 					num = num + 1
 					uci:foreach("adbrun", "adbrun", function(e)
@@ -80,7 +90,7 @@ function xact_status()
 								runtime = os.time() - tonumber(runtime)
 								if runtime >= 3600 then
 									runhours = (runtime - runtime%3600)/3600
-									local x = runtime - (runtime - runtime%3600)
+									local x = runtime%3600
 									if x  >= 60 then
 										runmins = (x - x%60)/60
 										runsecs = x%60
@@ -107,15 +117,17 @@ function xact_status()
 							end
 						end
 					end)
+					screensize = get_screensize(deviceid,port)
 					apk = get_apk(deviceid,port)
 					pid = get_pid(deviceid)
 				end
-			elseif ln:match("^(%w+).device") then
-				deviceid = ln:match("^(%w+).device")
+			elseif ln:match("^(%w+).") then
+				deviceid = ln:match("^(%w+).-")
 				port = "USB-Cable"
 				if num and deviceid then
 					num = num + 1
 					name = "Android"
+					screensize = "unknown"
 					apk = "init_adbrun"
 					pid = ""
 					runtime = ""
@@ -130,6 +142,7 @@ function xact_status()
 				name = name,
 				deviceid = deviceid,
 				port = port,
+				screensize = screensize,
 				apk = apk,
 				pid = pid,
 				uhttpd = webport,
