@@ -40,7 +40,7 @@ endef
 define Package/samba36-server
   $(call Package/samba/Default)
   TITLE+= server
-  DEPENDS:=+USE_GLIBC:librt $(ICONV_DEPENDS)
+  DEPENDS:=+USE_GLIBC:librt $(ICONV_DEPENDS) +wsdd2
 endef
 
 define Package/samba36-hotplug
