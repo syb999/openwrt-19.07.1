@@ -21,4 +21,3 @@ function gmrender_status()
 	luci.http.write_json(e)
 end
 
-
