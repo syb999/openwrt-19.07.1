@@ -26,6 +26,7 @@ function mixsonglist() {
 		for pp in $(seq 3);do
 			curl -s --retry 3 --retry-delay 2 --connect-timeout 10 -m 20 https://www.kugou.com/yy/rank/home/1-$kgp.html?p=$pp | grep mixsong | cut -d '"' -f 2 | cut -d '"' -f 1 >> /tmp/kugou.mixlist
 		done
+	done
 }
 
 function showlyric() {
@@ -59,7 +60,7 @@ function kugouplay() {
 	kgmixid=$(cat $thetmpfile1 | head -n 3 | tail -n 1 | cut -d '}' -f 1 | cut -d ',' -f 1)
 	mp3prefix="https://wwwapi.kugou.com/yy/index.php?r=play/getdata"
 	mp3hash="&hash=${kghash}"
-	mp3mid="&mid=9d77842dfdc04ea02e7ba982b3552263"
+	mp3mid="&mid=cb6010e84a1298873dfe9adcf4943d33"
 	mp3id="&album_audio_id=${kgmixid}"
 	mp3url=${mp3prefix}${mp3hash}${mp3mid}${mp3id}
 	curl -s --retry 3 --retry-delay 2 --connect-timeout 10 -m 20 $mp3url > $thetmpfile2
@@ -71,7 +72,7 @@ function kugouplay() {
 	echo ${urlinfo#*play_url\":\"} > $thetmpurl
 	themp3tmp=$(cat $thetmpurl)
 	echo ${themp3tmp%%\",\"authors*} | sed 's/\\//g' > $thetmpurl
-	wget -q $(cat $thetmpurl) -O /tmp/$kgname.xuoguk
+	wget-ssl -q $(cat $thetmpurl) -O /tmp/$kgname.xuoguk
 	if [ $(ls -l /tmp | grep xuoguk | awk '{print $5}') -lt "2300000" ];then
 		echo VIP收费歌曲，跳过
 		rm /tmp/$kgname.xuoguk /tmp/kugou.lyric
@@ -104,4 +105,3 @@ while true;do
 	done
 	rm /tmp/kugou.*
 done
-

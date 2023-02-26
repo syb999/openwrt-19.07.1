@@ -28,7 +28,7 @@ else
 	for i in $(seq 1 $countfiles)
 	do
 		cat $getfiles > /tmp/pdtmp.playnext
-		gst-play-1.0 $(cat $getfiles | head -n 1)
+		gst-play-1.0 -q $(cat $getfiles | head -n 1)
 		sed "1d" -i ${getfiles}
 	done
 fi
