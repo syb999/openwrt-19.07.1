@@ -25,7 +25,7 @@ SECTION:=multimedia
 CATEGORY:=Multimedia
 SUBMENU:=Streaming
 TITLE:=DarkIce is a live audio streamer
-DEPENDS:=+lame-lib +librt +libpthread +libstdcpp +alsa-utils
+DEPENDS:=+lame-lib +librt +libpthread +libstdcpp +alsa-utils +alsa-lib
 MAINTAINER:=Artur Wronowski <arteqw@gmail.com>
 endef
 
