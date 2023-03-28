@@ -5,11 +5,26 @@ sectionname=$(echo $0 | cut -d '_' -f 2 | sed 's/^ADBRUN//')
 adbclient=$(uci get adbrun.$sectionname.adbiplist)
 adbcommand=$(uci get adbrun.$sectionname.adbcommandlist)
 
-adb connect ${adbclient}:5555
 screensize=$(adb -s ${adbclient}:5555 shell wm size | cut -d ':' -f 2 | sed -e "s/ //g;s/\n//g;s/\r//g")
 
 case $adbcommand in
+	update-preview-picture) adbcd="update preview picture"
+	;;
 	push-and-install-apk) adbcd="push and install apk"
+	;;
+	reboot-bootloader) adbcd="reboot bootloader"
+	;;
+	reboot-recovery) adbcd="reboot recovery"
+	;;
+	reboot-fastboot) adbcd="reboot fastboot"
+	;;
+	reboot) adbcd="reboot"
+	;;
+	poweroff) adbcd="shell reboot -p"
+	;;
+	auto-install-ADBKeyboard) adbcd="auto-install ADBKeyboard"    
+	;;
+	input-chinese) adbcd="input chinese"
 	;;
 	turn-offon-the-screen) adbcd="shell input keyevent 26"
 	;;
@@ -170,7 +185,7 @@ if [ "$adbcd" == "scripts" ];then
 		sed -i "s/starttime=.*/starttime=$(date +%s)/" /tmp/ADBRUN${sectionname}_.sh
 		chmod +x /tmp/ADBRUN${sectionname}_.sh
 		exec sh /tmp/ADBRUN${sectionname}_.sh
-	elif  [ ${adbsh} == "jdlite" ];then
+	elif [ ${adbsh} == "jdlite" ];then
 		echo jdlite
 		if [ ${screensize} == "720x1280" ];then
 			cat ${spath}${adbsh} | sed 's/dosedxstart=/xstart=350/;s/dosedystart=/ystart=800/;s/dosedbasex=/basex=620/;s/dosedbasey=/basey=550/' > /tmp/ADBRUN${sectionname}_.sh
@@ -215,11 +230,32 @@ if [ "$adbcd" == "scripts" ];then
 		chmod +x /tmp/ADBRUN${sectionname}_.sh
 		exec sh /tmp/ADBRUN${sectionname}_.sh
 	fi
-elif  [ "$adbcd" == "push and install apk" ];then
+elif [ "$adbcd" == "update preview picture" ];then
+	rm /tmp/${adbclient}.png
+elif [ "$adbcd" == "push and install apk" ];then
 	adb -s ${adbclient}:5555 push "$(uci get adbrun.$sectionname.adb_src_path)" /sdcard/
-	sleep 10
+	sleep 5
 	adb -s ${adbclient}:5555 shell pm install /sdcard/$(echo $(uci get adbrun.$sectionname.adb_src_path) | cut -d '/' -f $(expr $(echo $(uci get adbrun.$sectionname.adb_src_path) | grep -o '/' | wc -l) + 1))
+elif [ "$adbcd" == "input chinese" ];then                                                                    
+        ch_text="$(uci get adbrun.$sectionname.adb_input_ch)"                                                 
+        adb -s ${adbclient}:5555 shell ime enable com.android.adbkeyboard/.AdbIME                             
+        adb -s ${adbclient}:5555 shell ime set com.android.adbkeyboard/.AdbIME                                
+        adb -s ${adbclient}:5555 shell am broadcast -a ADB_INPUT_TEXT --es msg "$ch_text"                     
+        adb -s ${adbclient}:5555 shell ime set "$(adb -s ${adbclient}:5555 shell ime list -a | grep mId | grep -v adbkeyboard | head -n1 | awk '{print$1}' | cut -d '=' -f2)"
+elif [ "$adbcd" == "auto-install ADBKeyboard" ];then 
+	wget https://raw.githubusercontent.com/syb999/android-apk/master/ADBKeyboard.apk -O /tmp/xxx.apk
+	sleep 5
+	adb -s ${adbclient}:5555 push /tmp/xxx.apk /sdcard/
+	sleep 5
+	adb -s ${adbclient}:5555 shell pm install /sdcard/xxx.apk
 else
-	adb -s ${adbclient}:5555 ${adbcd}
+	adb -s ${adbclient}:5555 ${adbcd} &
+	if [ -n "$(echo "$adbcd" | grep reboot)" ];then
+		while [ -n "$(adb devices | grep ${adbclient}:5555)" ];do
+			sleep 1
+			adb disconnect ${adbclient}
+			kill -9 $(busybox ps |grep ${adbclient}:5555 | grep -v grep | awk '{print$1}') >/dev/null 2>&1
+		done
+	fi
 fi
 

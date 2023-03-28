@@ -70,8 +70,38 @@ msgstr "命令列表"
 msgid "adbrun command list"
 msgstr "adbrun命令列表"
 
+msgid "update preview picture"
+msgstr "更新预览图片"
+
 msgid "push and install apk"
 msgstr "上传并安装apk"
+
+msgid "entry bootloader mode"
+msgstr "重启进入bootloader模式"
+
+msgid "entry recovery mode"
+msgstr "重启进入recovery模式"
+
+msgid "entry fastboot mode"
+msgstr "重启进入fastboot模式"
+
+msgid "reboot"
+msgstr "重启设备"
+
+msgid "poweroff"
+msgstr "关机"
+
+msgid "auto-install ADBKeyboard"
+msgstr "自动安装ADBKeyboard"
+
+msgid "input chinese"
+msgstr "输入中文"
+
+msgid "input text"
+msgstr "输入文本"
+
+msgid "please install ADBKeyboard.apk first"
+msgstr "请先安装好ADBKeyboard.apk"
 
 msgid "Turn off/on the screen"
 msgstr "关闭/打开屏幕"
