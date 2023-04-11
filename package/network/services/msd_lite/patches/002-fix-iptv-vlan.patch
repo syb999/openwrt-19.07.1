@@ -14,7 +14,7 @@
  
  	<threadPool>
 -		<threadsCountMax>1</threadsCountMax> <!-- 0 = auto -->
-+		<threadsCountMax>0</threadsCountMax> <!-- 0 = auto -->
++		<threadsCountMax>1</threadsCountMax> <!-- 0 = auto -->
  		<fBindToCPU>yes</fBindToCPU> <!-- Bind threads to CPUs. -->
  		<fCacheGetTimeSyscall>yes</fCacheGetTimeSyscall> <!-- Cache gettime() syscalls.. -->
  		<timerGranularity>100</timerGranularity> <!-- 1/1000 sec -->
