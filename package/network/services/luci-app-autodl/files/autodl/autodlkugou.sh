@@ -47,7 +47,7 @@ function kugoudownload() {
 			theurl="${urlprefix}${i}"		
 			curl --cookie "$thecookie" $theurl > /tmp/kgtmp.tmp.url
 			audiourl=$(cat /tmp/kgtmp.tmp.url | sed 's/play_backup_url\":\"/\n/;s/\\//g' | tail -n1 | cut -d '"' -f1)
-			wget-ssl $audiourl -O /$paudiopath/$paudioname/$audionum-$audioname.mp3
+			wget $audiourl -O /$paudiopath/$paudioname/$audionum-$audioname.mp3
 
 			count=$(expr $count + 1)
 			if [ $count -gt $paudionumber ];then

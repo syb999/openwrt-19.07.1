@@ -72,7 +72,7 @@ function kugouplay() {
 	echo ${urlinfo#*play_url\":\"} > $thetmpurl
 	themp3tmp=$(cat $thetmpurl)
 	echo ${themp3tmp%%\",\"authors*} | sed 's/\\//g' > $thetmpurl
-	wget-ssl -q $(cat $thetmpurl) -O /tmp/$kgname.xuoguk
+	wget -q $(cat $thetmpurl) -O /tmp/$kgname.xuoguk
 	if [ $(ls -l /tmp | grep xuoguk | awk '{print $5}') -lt "2300000" ];then
 		echo VIP收费歌曲，跳过
 		rm /tmp/$kgname.xuoguk /tmp/kugou.lyric
