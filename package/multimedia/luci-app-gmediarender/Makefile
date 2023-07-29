@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 
 PKG_NAME:=luci-app-gmediarender
-PKG_VERSION:=2023-03-16
+PKG_VERSION:=2023-07-21
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -17,11 +17,6 @@ endef
 
 define Package/luci-app-gmediarender/description
 	Easy to change binding interface
-endef
-
-define Build/Prepare
-	$(foreach po,$(wildcard ${CURDIR}/luasrc/i18n/*.po), \
-		po2lmo $(po) $(PKG_BUILD_DIR)/$(patsubst %.po,%.lmo,$(notdir $(po)));)
 endef
 
 define Build/Compile
