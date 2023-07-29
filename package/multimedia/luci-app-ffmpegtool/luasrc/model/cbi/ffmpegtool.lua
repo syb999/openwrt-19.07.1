@@ -1,10 +1,12 @@
 m = Map("ffmpegtool", translate("FFMPEG-Tool"))
+m.description = translate("Tips 1: add LOGO command\(for PC\): ffmpeg -i input.mp4 -vf \"movie=logo.png[wm];[in][wm]overlay=30:15[out]\" output.mp4")
 
 m:section(SimpleSection).template  = "ffmpegtool_status"
 
 s = m:section(TypedSection, "ffmpegtool", "", translate("Assistant for FFMPEG"))
 s.anonymous = true
 s.addremove = false
+s.description = translate("Tips 2: add subtitles command\(for PC\): ffmpeg -i input.mp4 -vf subtitles=1.srt output.mp4")
 
 s:tab("ffmpegbasic", translate("Basic Setting"))
 
@@ -119,6 +121,41 @@ audio_format:value("wav")
 audio_format.default = "mp3"
 audio_format.rempty  = false
 
+audio_merge=s:taboption("audio_setting", Flag, "audio_merge", translate("combine audio"))
+audio_merge:depends( "audio_copy", "" )
+audio_merge.default = ""
+
+enable_amix=s:taboption("audio_setting", ListValue, "enable_amix", translate("enable merge"))
+enable_amix:depends( "audio_merge", "1" )
+enable_amix:value("one by one",translate("one by one"))
+enable_amix:value("mix1",translate("Mixes 2 audio inputs into a single output"))
+enable_amix:value("mix2",translate("After merging the two stereo audio channels into single channels, mix them according to the left and right channels"))
+enable_amix:value("mix3",translate("Merge 2 single channel audio into one stereo by combining left and right channels"))
+enable_amix:value("mix4",translate("When splicing two audio tracks, add a silent track in the middle (default 5 seconds)"))
+enable_amix.default = "one by one"
+enable_amix.rempty  = true
+
+audio_null = s:taboption("audio_setting", Value, "audio_null", translate("Silent track duration in seconds"))
+audio_null:depends( "enable_amix", "mix4" )
+audio_null.datatype = "uinteger"
+audio_null.placeholder = "5"
+audio_null.default = "5"
+audio_null.rmempty = true
+
+audio_input1 = s:taboption("audio_setting", Value, "audio_input1", translate("The first file to be merged"))
+audio_input1:depends( "audio_merge", "1" )
+audio_input1.datatype = "string"
+audio_input1.placeholder = "/mnt/sda1/input1.mp3"
+audio_input1.default = "/mnt/sda1/input1.mp3"
+audio_input1.rmempty = true
+
+audio_input2 = s:taboption("audio_setting", Value, "audio_input2", translate("The second file to be merged"))
+audio_input2:depends( "audio_merge", "1" )
+audio_input2.datatype = "string"
+audio_input2.placeholder = "/mnt/sda1/input2.mp3"
+audio_input2.default = "/mnt/sda1/input2.mp3"
+audio_input2.rmempty = true
+
 sampling_rate=s:taboption("audio_setting", ListValue, "sampling_rate", translate("Sampling rate"))
 sampling_rate.placeholder = "none"
 sampling_rate:value("none")
@@ -208,6 +245,9 @@ volume:value("none")
 volume:value("standard")
 volume:value("+5dB")
 volume:value("-5dB")
+volume:value("0.2")
+volume:value("0.5")
+volume:value("1.5")
 volume.default = "none"
 volume.rempty  = false
 volume.description = translate("increase CPU loading")
@@ -241,6 +281,17 @@ video_format:value("3gp")
 video_format.default = "mp4"
 video_format.rempty  = false
 
+video_adjustspeed = s:taboption("video_setting", Flag, "video_adjustspeed", translate("adjust the playback speed"))
+video_adjustspeed:depends({ video_x2645 = "none", image_effects = "", screen_merge = "", video_picture = "", picture_tovideo = "" })
+
+list_adjustspeed=s:taboption("video_setting", ListValue, "list_adjustspeed", translate("speed list"))
+list_adjustspeed:depends( "video_adjustspeed", "1" )
+list_adjustspeed:value("0.5",translate("speed up by two times"))
+list_adjustspeed:value("2",translate("reduce the speed by two times"))
+list_adjustspeed:value("3",translate("reduce the speed by three times"))
+list_adjustspeed.default = "2"
+list_adjustspeed.rempty  = true
+
 video_x2645=s:taboption("video_setting", ListValue, "video_x2645", translate("using libx264/libx265"))
 video_x2645:value("none")
 video_x2645:value("libx264")
@@ -248,7 +299,7 @@ video_x2645:value("libx265")
 video_x2645.description = translate("increase CPU loading")
 
 image_effects=s:taboption("video_setting", Flag, "image_effects", translate("image effects"))
-image_effects:depends( "screen_merge", "" )
+image_effects:depends({ screen_merge = "", video_adjustspeed = "" })
 image_effects.description = translate("increase CPU loading when open")
 
 video_horizontally = s:taboption("video_setting", Flag, "video_horizontally", translate("flip image horizontally"))
@@ -291,6 +342,7 @@ video_blackandwhite:depends( "image_effects", "1" )
 
 screen_merge=s:taboption("video_setting", Flag, "screen_merge", translate("screen merge"))
 screen_merge.default = ""
+screen_merge:depends({ image_effects = "", video_adjustspeed = "" })
 screen_merge.description = translate("only modification duration is supported")
 
 enable_merge=s:taboption("video_setting", ListValue, "enable_merge", translate("enable merge"))
@@ -430,7 +482,7 @@ video_mute = s:taboption("video_setting", Flag, "video_mute", translate("Mute"))
 video_mute.default = ""
 
 video_picture = s:taboption("video_setting", Flag, "video_picture", translate("Save to picture"))
-video_picture:depends({ video_x2645 ="none", picture_tovideo = "" })
+video_picture:depends({ video_x2645 ="none", picture_tovideo = "", video_adjustspeed = "" })
 
 video_frames = s:taboption("video_setting", Flag, "video_frames", translate("Set the number of frames"))
 video_frames.default = ""
@@ -443,7 +495,7 @@ video_frames_num.default = "1"
 video_frames_num.rmempty = true
 
 picture_tovideo = s:taboption("video_setting", Flag, "picture_tovideo", translate("picture to video"))
-picture_tovideo:depends( "video_x2645", "none" )
+picture_tovideo:depends({ video_x2645 ="none", video_picture = "", video_adjustspeed = "" })
 picture_tovideo.default = ""
 
 ptv_one=s:taboption("video_setting", Flag, "ptv_one", translate("only one picture"))
