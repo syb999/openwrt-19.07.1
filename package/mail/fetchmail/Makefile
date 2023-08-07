@@ -48,7 +48,8 @@ endef
 
 define Package/fetchmail/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fetchmail $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/fetchmail $(1)/usr/bin/
+	$(INSTALL_BIN) ./files/process_mail $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/fetchmail_set $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(CP) ./files/fetchmailrc $(1)/etc
