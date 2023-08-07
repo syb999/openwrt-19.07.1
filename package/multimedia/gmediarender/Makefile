@@ -25,8 +25,8 @@ define Package/gmediarender
   CATEGORY:=Multimedia
   TITLE:=gmediarender
   URL:=https://github.com/hzeller/gmrender-resurrect
-  DEPENDS:= +gstreamer1 +glib2 +libupnp \
-	+gstreamer1-plugins-base +gst1-plugins-base \
+  DEPENDS:=+glib2 +gstreamer1 +libgstreamer1 +gstreamer1-libs \
+	+libupnp +gstreamer1-plugins-base +gst1-plugins-base \
 	+gstreamer1-utils +gst1-libav
 endef
 
@@ -34,7 +34,10 @@ define Package/gmrender/description
 	Headless UPnP Renderer
 endef
 
-TARGET_CFLAGS += -std=gnu99
+CONFIGURE_ARGS+= \
+	CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
+	--with-build-cc="$(HOSTCC)" \
+	--prefix="\usr"
 
 define Package/gmediarender/install
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -42,7 +45,7 @@ define Package/gmediarender/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/gmediarender.init $(1)/etc/init.d/gmediarender
 	$(INSTALL_DIR) $(1)/usr/share/gmediarender/
-	#$(INSTALL_DATA) ./files/*.png $(1)/usr/share/gmediarender/
+	$(INSTALL_DATA) ./files/*.png $(1)/usr/share/gmediarender/
 endef
 
 $(eval $(call BuildPackage,gmediarender))
