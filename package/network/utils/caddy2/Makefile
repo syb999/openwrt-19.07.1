@@ -1,24 +1,17 @@
-# Copyright (C) 2010-2020 OpenWrt.org
-#
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=caddy2
-PKG_VERSION:=2.6.4
-PKG_RELEASE:=1
+PKG_VERSION:=2.7.3
+PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/caddyserver/caddy.git
-PKG_SOURCE_VERSION:=0db29e2ce9799f652f3d16fd5aed6e426d23bd0a
+PKG_SOURCE_VERSION:=a8cc5d1a7d9d80e12ab895beaf4eaed34cc6bded
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
-PKG_MIRROR_HASH:=1b957f5df1677afb5d84d20065309e6344c15e2995a16cd8a2ff9d09c137a0f6
+PKG_HASH:=3c158f54f10ac9c9b24a6c825a15495b4dfb78fbe2b331ffef7f8143a90e776a
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
-PKG_MAINTAINER:=SYB
 
 PKG_BUILD_DEPENDS:=golang/host
 PKG_BUILD_PARALLEL:=1
@@ -43,7 +36,6 @@ endef
 define Package/$(PKG_NAME)/description
 Still the only web server to use TLS automatically and by default. Deploy and scale HTTPS effortlessly with Caddy2.
 endef
-
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
