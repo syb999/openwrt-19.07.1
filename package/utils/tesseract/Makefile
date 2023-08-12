@@ -7,18 +7,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tesseract
-PKG_VERSION:=4.0.0
-PKG_RELEASE:=2
+PKG_VERSION:=4.1.3
+PKG_RELEASE:=$(AUTORELEASE)
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/tesseract-ocr/tesseract/tar.gz/$(PKG_VERSION)?
-PKG_HASH:=a1f5422ca49a32e5f35c54dee5112b11b99928fc9f4ee6695cdc6768d69f61dd
+PKG_HASH:=83dc56b544be938983f528c777e4e1d906205b0f6dc0110afc223f2cc1cec6d3
 
 PKG_MAINTAINER:=Valentin Kivachuk <vk18496@gmail.com>
 PKG_LICENSE:=Apache-2.0
 PKG_LICENSE_FILES:=LICENSE
 
-PKG_BUILD_PARALLEL:=1
 CMAKE_BINARY_SUBDIR:=openwrt-build
 
 include $(INCLUDE_DIR)/package.mk
@@ -54,6 +53,8 @@ define Package/tesseract/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*.so.* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/share/tessdata
+	$(INSTALL_BIN) ./files/*.traineddata $(1)/usr/share/tessdata/
 endef
 
 $(eval $(call BuildPackage,tesseract))
