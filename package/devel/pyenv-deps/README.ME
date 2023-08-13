@@ -1,0 +1,26 @@
+The "pyenv-deps" package provides support for using the pyenv environment in OpenWrt. Please ensure that the libffi library in the OpenWrt source code has been upgraded to version 3.4.x or higher.
+
+The process of using the pyenv environment in OpenWrt is as follows:
+
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+pyenv install 3.9.17 -v
+pyenv rehash
+pyenv global 3.9.17
+
+Reopen the shell to apply the changes.
+Testing Device: Raspberry Pi 3B
+RAM: 1GB
+Tested OpenWrt Version: openwrt-19.07
+
+During testing, it was observed that on devices with 1GB of RAM, an Out-Of-Memory (OOM) error occurs when installing libraries such as numpy using pip.
+Allocate at least 2GB of swap space to address this issue (ensure that the remaining space on the SD card is mounted):
+dd if=/dev/zero of=/mnt/mmcblk0p3/swap/swapfile bs=1M count=2048
+chmod 600 /mnt/mmcblk0p3/swap/swapfile
+mkswap /mnt/mmcblk0p3/swap/swapfile
+swapon /mnt/mmcblk0p3/swap/swapfile
+
+By default, when using pip install numpy and similar libraries, all available CPU threads are used, causing a spike in CPU load. To prevent this and avoid system hang, the default configuration in the .profile file on the Raspberry Pi 3B (which has 4 threads) adds the line export MAKEFLAGS=-j2 to limit the compilation to 2 threads.
+
+Additionally, it was observed that an insufficient space error occurs when installing the "pandas" library using pip install pandas. Please ensure that the disk where the directories configured in the .profile reside has sufficient space available.
+
+

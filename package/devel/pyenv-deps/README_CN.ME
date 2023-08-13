@@ -1,0 +1,26 @@
+pyenv-deps包提供openwrt使用pyenv环境的支持.
+请先确保openwrt源码内的libffi已升级到3.4.x+版本
+
+在openwrt使用pyenv环境流程:
+opkg install pyenv-deps
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+pyenv install 3.9.17 -v
+pyenv rehash
+pyenv global 3.9.17
+重新打开shell即可。
+测试设备:树莓派3B RAM:1G
+测试版本:openwrt-19.07
+
+测试发现:在RAM:1G的设备上pip install numpy等库时，会因内存不足而OOM报错。
+至少开启2G的swap来解决该问题(请先挂载好tf卡剩余空间)：
+dd if=/dev/zero of=/mnt/mmcblk0p3/swap/swapfile bs=1M count=2048
+chmod 600 /mnt/mmcblk0p3/swap/swapfile
+mkswap /mnt/mmcblk0p3/swap/swapfile
+swapon /mnt/mmcblk0p3/swap/swapfile
+默认情况下，直接pip install numpy等库时，还会因为占用所有的CPU线程，
+导致CPU负载飙升。由于树莓派3B共有4个线程，我这边使用在.profile里添加
+export MAKEFLAGS=-j2来锁定2个线程,避免死机。
+
+测试发现:pip install pandas库时会发生空间不足的报错。请确保.pyenv目录
+所在磁盘有足够空间。
+

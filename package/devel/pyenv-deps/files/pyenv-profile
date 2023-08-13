@@ -1,0 +1,9 @@
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+export TMPDIR="$HOME/pip_temp"
+export MAKEFLAGS=-j2
+eval "$(pyenv init -)"
+
+
+
+
