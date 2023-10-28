@@ -1,0 +1,112 @@
+--- a/include/asterisk/compat.h
++++ b/include/asterisk/compat.h
+@@ -68,7 +68,7 @@
+ #endif
+ 
+ #ifndef AST_POLL_COMPAT
+-#include <sys/poll.h>
++#include <poll.h>
+ #else
+ #include "asterisk/poll-compat.h"
+ #endif
+@@ -130,14 +130,16 @@ void timersub(struct timeval *tvend, str
+ 
+ #include <errno.h>
+ 
+-#ifdef SOLARIS
++#ifndef __BEGIN_DECLS
+ #define __BEGIN_DECLS
+ #define __END_DECLS
++#endif
+ 
+ #ifndef __P
+ #define __P(p) p
+ #endif
+ 
++#ifdef SOLARIS
+ #include <alloca.h>
+ #include <strings.h>
+ #include <pthread.h>
+--- a/include/asterisk/poll-compat.h
++++ b/include/asterisk/poll-compat.h
+@@ -83,7 +83,7 @@
+ 
+ #ifndef AST_POLL_COMPAT
+ 
+-#include <sys/poll.h>
++#include <poll.h>
+ 
+ #define ast_poll(a, b, c) poll(a, b, c)
+ 
+--- a/main/db1-ast/include/db.h
++++ b/main/db1-ast/include/db.h
+@@ -37,7 +37,6 @@
+ #define	_DB_H 1
+ 
+ #include <sys/types.h>
+-#include <sys/cdefs.h>
+ 
+ #include <limits.h>
+ 
+@@ -69,8 +68,11 @@ typedef	unsigned long long	u_int64_t;
+ #endif /* __FreeBSD__ */
+ #endif
+ 
+-#ifdef SOLARIS
++#ifndef __P
+ #define	__P(p) p
++#endif
++
++#ifndef __BEGIN_DECLS
+ #define __BEGIN_DECLS
+ #define __END_DECLS
+ #endif
+--- a/main/editline/np/vis.c
++++ b/main/editline/np/vis.c
+@@ -34,7 +34,6 @@
+  * SUCH DAMAGE.
+  */
+ 
+-#include <sys/cdefs.h>
+ #if defined(LIBC_SCCS) && !defined(lint)
+ __RCSID("$NetBSD: vis.c,v 1.22 2002/03/23 17:38:27 christos Exp $");
+ #endif /* LIBC_SCCS and not lint */
+--- a/main/editline/np/vis.h
++++ b/main/editline/np/vis.h
+@@ -74,7 +74,14 @@
+  */
+ #define	UNVIS_END	1	/* no more characters */
+ 
+-#include <sys/cdefs.h>
++#ifndef __P
++#define	__P(p) p
++#endif
++
++#ifndef __BEGIN_DECLS
++#define __BEGIN_DECLS
++#define __END_DECLS
++#endif
+ 
+ __BEGIN_DECLS
+ char	*vis __P((char *, int, int, int));
+--- a/main/editline/np/unvis.c
++++ b/main/editline/np/unvis.c
+@@ -33,7 +33,6 @@
+  * SUCH DAMAGE.
+  */
+ 
+-#include <sys/cdefs.h>
+ #if defined(LIBC_SCCS) && !defined(lint)
+ #if 0
+ static char sccsid[] = "@(#)unvis.c	8.1 (Berkeley) 6/4/93";
+--- a/main/editline/sys.h
++++ b/main/editline/sys.h
+@@ -128,8 +128,4 @@ extern ptr_t    memset(ptr_t, int, size_
+ extern char    *fgetline(FILE *, int *);
+ #endif
+ 
+-#ifdef HAVE_SYS_CDEFS_H
+-#include <sys/cdefs.h>
+-#endif
+-
+ #endif /* _h_sys */
