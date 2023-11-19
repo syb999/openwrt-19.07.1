@@ -1,0 +1,43 @@
+--- a/channels/chan_sip.c
++++ b/channels/chan_sip.c
+@@ -7505,6 +7505,8 @@ static struct ast_channel *sip_new(struc
+ 		pbx_builtin_setvar_helper(tmp, "SIPURI", i->uri);
+ 	if (!ast_strlen_zero(i->domain))
+ 		pbx_builtin_setvar_helper(tmp, "SIPDOMAIN", i->domain);
++	if (!ast_strlen_zero(i->tel_phone_context))
++		pbx_builtin_setvar_helper(tmp, "SIPURIPHONECONTEXT", i->tel_phone_context);
+ 	if (!ast_strlen_zero(i->callid))
+ 		pbx_builtin_setvar_helper(tmp, "SIPCALLID", i->callid);
+ 	if (i->rtp)
+@@ -15918,6 +15920,12 @@ static enum sip_get_dest_result get_dest
+ 
+ 	extract_host_from_hostport(&domain);
+ 
++	if (strncasecmp(get_in_brackets(tmp), "tel:", 4)) {
++		ast_string_field_set(p, domain, domain);
++	} else {
++		ast_string_field_set(p, tel_phone_context, domain);
++	}
++
+ 	if (ast_strlen_zero(uri)) {
+ 		/*
+ 		 * Either there really was no extension found or the request
+@@ -15927,8 +15935,6 @@ static enum sip_get_dest_result get_dest
+ 		uri = "s";
+ 	}
+ 
+-	ast_string_field_set(p, domain, domain);
+-
+ 	/* Now find the From: caller ID and name */
+ 	/* XXX Why is this done in get_destination? Isn't it already done?
+ 	   Needs to be checked
+--- a/channels/sip/include/sip.h
++++ 2/channels/sip/include/sip.h
+@@ -992,6 +992,7 @@ struct sip_pvt {
+ 		AST_STRING_FIELD(parkinglot);   /*!< Parkinglot */
+ 		AST_STRING_FIELD(engine);       /*!< RTP engine to use */
+ 		AST_STRING_FIELD(dialstring);   /*!< The dialstring used to call this SIP endpoint */
++		AST_STRING_FIELD(tel_phone_context);       /*!< The phone-context portion of a TEL URI */
+ 	);
+ 	char via[128];                          /*!< Via: header */
+ 	int maxforwards;                        /*!< SIP Loop prevention */
