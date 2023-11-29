@@ -367,6 +367,9 @@ ramips_board_detect() {
 	*"Newifi-D1")
 		name="newifi-d1"
 		;;
+	*"Bussiness Router")
+		name="bussiness-router"
+		;;
 	*"NCS601W")
 		name="ncs601w"
 		;;
