@@ -1,0 +1,63 @@
+--- a/include/asterisk/compat.h
++++ b/include/asterisk/compat.h
+@@ -130,14 +130,16 @@ void timersub(struct timeval *tvend, str
+ 
+ #include <errno.h>
+ 
+-#ifdef SOLARIS
++#ifndef __BEGIN_DECLS
+ #define __BEGIN_DECLS
+ #define __END_DECLS
++#endif
+ 
+ #ifndef __P
+ #define __P(p) p
+ #endif
+ 
++#ifdef SOLARIS
+ #include <alloca.h>
+ #include <strings.h>
+ #include <pthread.h>
+--- a/utils/db1-ast/include/db.h
++++ b/utils/db1-ast/include/db.h
+@@ -37,7 +37,6 @@
+ #define	_DB_H 1
+ 
+ #include <sys/types.h>
+-#include <sys/cdefs.h>
+ 
+ #include <limits.h>
+ 
+@@ -68,8 +67,11 @@ typedef	unsigned long long	u_int64_t;
+ #endif /* __FreeBSD__ */
+ #endif
+ 
+-#ifdef SOLARIS
++#ifndef __P
+ #define	__P(p) p
++#endif
++
++#ifndef __BEGIN_DECLS
+ #define __BEGIN_DECLS
+ #define __END_DECLS
+ #endif
+--- a/main/ast_expr2.y
++++ b/main/ast_expr2.y
+@@ -14,7 +14,6 @@
+ 
+ #include "asterisk.h"
+ 
+-#include <sys/cdefs.h>
+ #include <sys/types.h>
+ #include <stdio.h>
+ 
+--- a/main/ast_expr2.c
++++ b/main/ast_expr2.c
+@@ -14,7 +14,6 @@
+ 
+ #include "asterisk.h"
+ 
+-#include <sys/cdefs.h>
+ #include <sys/types.h>
+ #include <stdio.h>
+ 
