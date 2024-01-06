@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 
 PKG_NAME:=luci-app-adbrun
-PKG_VERSION:=20230613
+PKG_VERSION:=20240106
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -17,6 +17,11 @@ endef
 
 define Package/luci-app-adbrun/description
 	adb tool
+endef
+
+define Build/Prepare
+	$(foreach po,$(wildcard ${CURDIR}/luasrc/i18n/*.po), \
+		po2lmo $(po) $(PKG_BUILD_DIR)/$(patsubst %.po,%.lmo,$(notdir $(po)));)
 endef
 
 define Build/Compile
