@@ -76,6 +76,14 @@ define Device/seama
   SEAMA_SIGNATURE :=
 endef
 
+define Device/100msh_hq65
+  ATH_SOC := qca9531
+  DEVICE_TITLE := 100MSH HQ65
+  DEVICE_PACKAGES := panel-ap-setup
+  IMAGE_SIZE := 16000k
+endef
+TARGET_DEVICES += 100msh_hq65
+
 define Device/8dev_carambola2
   ATH_SOC := ar9331
   DEVICE_TITLE := 8devices Carambola2

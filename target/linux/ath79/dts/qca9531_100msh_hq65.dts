@@ -1,0 +1,26 @@
+/dts-v1/;
+
+#include "qca9531_100msh_hq65.dtsi"
+
+/ {
+	compatible = "100msh,hq65", "qca,qca9531";
+	model = "100MSH HQ65";
+};
+
+// "Disable" unpopulated GMAC1
+
+&eth1 {
+	compatible = "syscon", "simple-mfd";
+};
+
+&led_status {
+	label = "hq65:red:status";
+};
+
+&led_wan {
+	label = "hq65:green:wan";
+};
+
+&led_wlan {
+	label = "hq65:green:wlan";
+};

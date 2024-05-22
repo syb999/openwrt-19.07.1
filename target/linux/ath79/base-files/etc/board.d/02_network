@@ -9,6 +9,9 @@ ath79_setup_interfaces()
 	local board="$1"
 
 	case "$board" in
+	100msh,hq65)
+		ucidef_set_interfaces_lan_wan "eth1" "eth0"
+		;;
 	aruba,ap-105|\
 	avm,fritz300e|\
 	devolo,dvl1200i|\
